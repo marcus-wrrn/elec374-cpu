@@ -21,15 +21,6 @@ module register #(parameter qInitial = 0)(
 	input wire [31:0] d,
 	output reg [31:0] q
 );
-	// Module implementation goes here
-endmodule
-module register #(parameter qInitial = 0)(
-	input wire clk,
-	input wire clr,
-	input wire enable,
-	input wire [31:0] d,
-	output reg [31:0] q
-);
 
 	initial q = qInitial;
 	always @ (posedge clk)
