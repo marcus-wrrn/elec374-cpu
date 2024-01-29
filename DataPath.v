@@ -82,9 +82,42 @@ register OUTPORT(clock, clear, OUTPORTin, bus_contents, OUTPORT_data_out); // In
 // Stop.In: Stop signal
 // Reset.In: Reset signal
 
-// TODO: Adder
 
 // TODO: BUS
+
+// Initialize 32 to 1 multiplexer to select the output to send out to the bus
+mux_32_to_1 BusMux(
+    .BusMuxIn_R0(R0_data_out),
+    .BusMuxIn_R1(R1_data_out), 
+    .BusMuxIn_R2(R2_data_out),
+    .BusMuxIn_R3(R3_data_out),
+    .BusMuxIn_R4(R4_data_out),
+    .BusMuxIn_R5(R5_data_out),
+    .BusMuxIn_R6(R6_data_out),
+    .BusMuxIn_R7(R7_data_out),
+    .BusMuxIn_R8(R8_data_out),
+    .BusMuxIn_R9(R9_data_out),
+    .BusMuxIn_R10(R10_data_out),
+    .BusMuxIn_R11(R11_data_out),
+    .BusMuxIn_R12(R12_data_out),
+    .BusMuxIn_R13(R13_data_out),
+    .BusMuxIn_R14(R14_data_out),
+    .BusMuxIn_R15(R15_data_out),
+    .BusMuxIn_HI(HI_data_out),
+    .BusMuxIn_LO(LO_data_out),
+    .BusMuxIn_Z_HI(Z_HI_data_out),
+    .BusMuxIn_Z_LO(Z_LO_data_out),
+    .BusMuxIn_PC(PC_data_out),
+    .BusMuxIn_MDR(MDR_data_out),
+    .BusMuxIn_INPORT(INPORT_data_out),
+    .C_sign_extended(C_sign_extended),
+    .BusMuxOut(bus_contents),
+    .select_signal(bus_encoder_signal)
+);
+
+// TODO: Initialize 32 to 5 multiplexer to select the enable signal to send out to the 32 to 1 multiplexer
+
+// TODO: Initialize ALU
 
 
 endmodule
