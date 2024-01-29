@@ -1,3 +1,5 @@
+// TODO: Make 32 bit bus and connections to all registers
+
 module Bus (
 	//Mux
 	input [7:0]BusMuxInRZ, input [7:0]BusMuxInRA, input [7:0]BusMuxInRB,
