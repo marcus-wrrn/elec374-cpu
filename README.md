@@ -1,6 +1,7 @@
 # elec374-cpu
 
 ## Phase 1
+
 - [x] registers.v
   - [x] reg_32_bit
   - [x] pc_reg
