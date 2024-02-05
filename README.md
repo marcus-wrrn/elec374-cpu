@@ -1,6 +1,21 @@
 # elec374-cpu
 
+The purpose of this project is to design, simulate, implement, and verify a simple RISC computer.
+The design consists of a simple RISC processor, memory, and I/O. Intel Quartus Prime Design Software
+and ModelSim-Intel are used for this purpose. The design is to be implemented on the Cyclone V chip
+(5CEBA4F23C7) of the DE0-CV development board.
+
+Read more about this project in the [CPU Specifications](/documents/cpu_specification.pdf).
+
 ## Phase 1
+
+The objective of this phase is to build some of the datapath, registers, and ALU.
+
+- [Phase 1 Instructions](/documents/phase_1/phase_1.pdf)
+
+- [Phase 1 Rubric](/documents/phase_1/phase_1_rubric.pdf)
+
+### To implement
 
 - [x] registers.v
   - [x] reg_32_bit
