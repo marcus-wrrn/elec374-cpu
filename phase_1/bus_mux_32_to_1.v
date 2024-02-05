@@ -3,7 +3,7 @@ module bus_mux_32_to_1 (
     output reg [31:0] bus_mux_out,
 
     // 5 bit input from the encoder_32_to_5 to select the register to put on the bus
-    input wire [4:0] select_signal,
+    input wire [4:0] select_encoded,
     
     // up to 32 wire inputs because 5 bit select signal (24 for now)
     input wire [31:0] bus_mux_in_r0,
