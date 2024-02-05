@@ -29,11 +29,11 @@ module bus_mux_32_to_1 (
     input wire [31:0] bus_mux_in_pc,
     input wire [31:0] bus_mux_in_mdr,
     input wire [31:0] bus_mux_in_inport,
-    input wire [31:0] bus_mux_in_c_sign_extended,
+    input wire [31:0] bus_mux_in_c_sign_extended
 );
 
 always @ (*) begin
-	case (select_signal)
+	case (select_encoded)
         // Select the register to put on the bus based on the 5 bit input from the 32 to 5 encoder
         5'd0    :   bus_mux_out <= bus_mux_in_r0[31:0];
         5'd1    :   bus_mux_out <= bus_mux_in_r1[31:0];

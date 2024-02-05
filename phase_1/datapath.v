@@ -3,8 +3,8 @@
 module datapath (
 	input wire clk,
     input wire clr,
-    input wire[31:0] select;
-
+    input wire[31:0] select,
+    output wire[4:0] select_encoded
 );
 
 // Register enable signals
@@ -118,7 +118,7 @@ bus_mux_32_to_1 bus_mux(
 );
 
 // Instantiate Select Signal Encoder and encoded select signal
-wire [4:0] select_encoded;
+// wire [4:0] select_encoded;
 encoder_32_to_5 select_encoder(
     .encoder_in(select),
     .encoder_out(select_encoded)
