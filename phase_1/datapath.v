@@ -7,6 +7,9 @@ module datapath (
     output wire[4:0] select_encoded
 );
 
+// Bus wire
+wire [31:0] bus;
+
 // Register enable signals
 wire r0_enable;
 wire r1_enable;
