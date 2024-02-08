@@ -1,10 +1,7 @@
 // TODO: Finish the datapath module
 
 module datapath (
-	input wire clk,
-    input wire clr,
-    input wire[31:0] select,
-    output wire[4:0] select_encoded
+
 );
 
 // Bus wire

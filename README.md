@@ -48,3 +48,37 @@ The objective of this phase is to build some of the datapath, registers, and ALU
 - [x] rotate_ops.v
   - [x] ror
   - [x] rol
+
+### Test
+
+- [ ] registers.v
+  - [ ] reg_32_bit
+  - [ ] pc_reg
+- [ ] datapath.v
+  - [ ] bus
+  - [ ] registers
+    - [ ] mdr
+    - [ ] mar
+    - [ ] ir
+    - [ ] hi/lo
+    - [ ] pc
+    - [ ] y
+    - [ ] z
+  - [ ] bus_mux_32_to_1.v
+  - [ ] encoder_32_to_5.v
+- [ ] mul.v
+- [ ] div.v
+- [ ] add.v
+- [ ] sub.v
+- [ ] logical_ops.v
+  - [ ] logical_and
+  - [ ] logical_or
+  - [ ] logical_neg
+  - [ ] logical_not
+- [ ] shift_ops.v
+  - [ ] shr
+  - [ ] shra
+  - [ ] shl
+- [ ] rotate_ops.v
+  - [ ] ror
+  - [ ] rol
