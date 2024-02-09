@@ -15,7 +15,7 @@
 module reg_32_bit (
 	input wire clk,
 	input wire clr,
-	input wire en,
+	input wire enable,
 	input wire [31:0] d,
 	output reg [31:0] q
 );
@@ -27,7 +27,7 @@ module reg_32_bit (
 	always @ (posedge clk) begin
 		if (clr)
 			q <= 0;
-		else if (en)
+		else if (enable)
 			q <= d;
 	end
 
