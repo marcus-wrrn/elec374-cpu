@@ -1,11 +1,20 @@
 // TODO: Finish the datapath module
 
 module datapath (
-
+    input pc_out,
+    input zlo_out,
+    input mdr_out,
+    input r2_out,
+    input r3_out,
+    input mar_in,
+    input zlo_enable,
+    input zhi_enable,
+    input pc_enable,
+    
 );
 
-// Bus wire
 wire [31:0] bus;
+wire [31:0] mdr_connection;
 
 // Register enable signals
 wire r0_enable;
@@ -30,7 +39,7 @@ wire lo_enable;
 wire zlo_enable;
 wire zhi_enable;
 wire pc_enable;
-wire mdr_enable;
+// wire mdr_enable;
 wire ir_enable;
 
 // Register output data wires (connect to the bus)
@@ -83,12 +92,13 @@ reg_32_bit lo(clk, clr, lo_enable, bus, lo_out);
 reg_32_bit zlo(clk, clr, zlo_enable, bus, zlo_out);
 reg_32_bit zhi(clk, clr, zhi_enable, bus, zhi_out);
 reg_32_bit pc(clk, clr, pc_enable, bus, pc_out);
-reg_32_bit mdr(clk, clr, mdr_enable, bus, mdr_out);
 reg_32_bit ir(clk, clr, ir_enable, bus, ir_out);
+reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_out);
+
 
 // Instantiate MDR Mux
 mdr_mux_2_to_1 mdr_mux(
-    .out(mdr_out),
+    .out(mdr_connection),
     .read(read),
     .from_bus(bus),
     .from_mem_chip(m_data_in)
