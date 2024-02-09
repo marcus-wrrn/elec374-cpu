@@ -10,7 +10,7 @@ module datapath (
     input zlo_enable,
     input zhi_enable,
     input pc_enable,
-    
+
 );
 
 wire [31:0] bus;
@@ -39,7 +39,7 @@ wire lo_enable;
 wire zlo_enable;
 wire zhi_enable;
 wire pc_enable;
-// wire mdr_enable;
+wire mdr_enable;
 wire ir_enable;
 
 // Register output data wires (connect to the bus)
