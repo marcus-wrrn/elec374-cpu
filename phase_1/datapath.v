@@ -86,6 +86,14 @@ reg_32_bit pc(clk, clr, pc_enable, bus, pc_out);
 reg_32_bit mdr(clk, clr, mdr_enable, bus, mdr_out);
 reg_32_bit ir(clk, clr, ir_enable, bus, ir_out);
 
+// Instantiate MDR Mux
+mdr_mux_2_to_1 mdr_mux(
+    .out(mdr_out),
+    .read(read),
+    .from_bus(bus),
+    .from_mem_chip(m_data_in)
+);
+
 // Instantiate Bus Mux
 bus_mux_32_to_1 bus_mux(
     .bus_mux_out(bus),
