@@ -1,4 +1,4 @@
-module booth_mult(input signed [31:0], m, q, output [63:0] out)
+module booth_mult(input signed [31:0] m, q, output [63:0] out)
 
     reg [2:0] bit_pairs [15:0];
     reg signed [32:0] hold [15:0];
