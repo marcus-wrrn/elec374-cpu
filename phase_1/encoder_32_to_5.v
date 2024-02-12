@@ -6,32 +6,31 @@ module encoder_32_to_5 (
 always @ (*) begin
     case(encoder_in)
         // Convert the 32 bit input to a 5 bit output select signal for the bus_mux_32_to_1
-        0           :   encoder_out <= 5'd0;    // input wire 0, output 00000
-        (1 << 0)    :   encoder_out <= 5'd1;    // input wire bit 0 = 1, output 00001
-        (1 << 1)    :   encoder_out <= 5'd2;    // input wire bit 1 = 1, output 00010
-        (1 << 2)    :   encoder_out <= 5'd3;    // input wire bit 2 = 1, output 00011
-        (1 << 3)    :   encoder_out <= 5'd4;    // input wire bit 3 = 1, output 00100
-        (1 << 4)    :   encoder_out <= 5'd5;    // input wire bit 4 = 1, output 00101
-        (1 << 5)    :   encoder_out <= 5'd6;    // input wire bit 5 = 1, output 00110
-        (1 << 6)    :   encoder_out <= 5'd7;    // input wire bit 6 = 1, output 00111
-        (1 << 7)    :   encoder_out <= 5'd8;    // input wire bit 7 = 1, output 01000
-        (1 << 8)    :   encoder_out <= 5'd9;    // input wire bit 8 = 1, output 01001
-        (1 << 9)    :   encoder_out <= 5'd10;   // input wire bit 9 = 1, output 01010
-        (1 << 10)   :   encoder_out <= 5'd11;   // input wire bit 10 = 1, output 01011
-        (1 << 11)   :   encoder_out <= 5'd12;   // input wire bit 11 = 1, output 01100
-        (1 << 12)   :   encoder_out <= 5'd13;   // input wire bit 12 = 1, output 01101
-        (1 << 13)   :   encoder_out <= 5'd14;   // input wire bit 13 = 1, output 01110
-        (1 << 14)   :   encoder_out <= 5'd15;   // input wire bit 14 = 1, output 01111
-        (1 << 15)   :   encoder_out <= 5'd16;   // input wire bit 15 = 1, output 10000
-        (1 << 16)   :   encoder_out <= 5'd17;   // input wire bit 16 = 1, output 10001
-        (1 << 17)   :   encoder_out <= 5'd18;   // input wire bit 17 = 1, output 10010
-        (1 << 18)   :   encoder_out <= 5'd19;   // input wire bit 18 = 1, output 10011
-        (1 << 19)   :   encoder_out <= 5'd20;   // input wire bit 19 = 1, output 10100
-        (1 << 20)   :   encoder_out <= 5'd21;   // input wire bit 20 = 1, output 10101
-        (1 << 21)   :   encoder_out <= 5'd22;   // input wire bit 21 = 1, output 10110
-        (1 << 22)   :   encoder_out <= 5'd23;   // input wire bit 22 = 1, output 10111
-        (1 << 23)   :   encoder_out <= 5'd24;   // input wire bit 23 = 1, output 11000
-        default     :   encoder_out <= 5'd31;   // input wire invalid, output 11111 (an invalid 5 bit value for the bus_mux_32_to_1)
+        32'h000001  :   encoder_out <= 5'h01;   // r0               Binary input: 00000000000000000000000000000001 Binary output: 00001
+        32'h000002  :   encoder_out <= 5'h02;   // r1               Binary input: 00000000000000000000000000000010 Binary output: 00010
+        32'h000004  :   encoder_out <= 5'h03;   // r2               Binary input: 00000000000000000000000000000100 Binary output: 00011
+        32'h000008  :   encoder_out <= 5'h04;   // r3               Binary input: 00000000000000000000000000001000 Binary output: 00100
+        32'h000010  :   encoder_out <= 5'h05;   // r4               Binary input: 00000000000000000000000000010000 Binary output: 00101
+        32'h000020  :   encoder_out <= 5'h06;   // r5               Binary input: 00000000000000000000000000100000 Binary output: 00110
+        32'h000040  :   encoder_out <= 5'h07;   // r6               Binary input: 00000000000000000000000001000000 Binary output: 00111
+        32'h000080  :   encoder_out <= 5'h08;   // r7               Binary input: 00000000000000000000000010000000 Binary output: 01000
+        32'h000100  :   encoder_out <= 5'h09;   // r8               Binary input: 00000000000000000000000100000000 Binary output: 01001
+        32'h000200  :   encoder_out <= 5'h0A;   // r9               Binary input: 00000000000000000000001000000000 Binary output: 01010
+        32'h000400  :   encoder_out <= 5'h0B;   // r10              Binary input: 00000000000000000000010000000000 Binary output: 01011
+        32'h000800  :   encoder_out <= 5'h0C;   // r11              Binary input: 00000000000000000000100000000000 Binary output: 01100
+        32'h001000  :   encoder_out <= 5'h0D;   // r12              Binary input: 00000000000000000001000000000000 Binary output: 01101
+        32'h002000  :   encoder_out <= 5'h0E;   // r13              Binary input: 00000000000000000010000000000000 Binary output: 01110
+        32'h004000  :   encoder_out <= 5'h0F;   // r14              Binary input: 00000000000000000100000000000000 Binary output: 01111
+        32'h008000  :   encoder_out <= 5'h10;   // r15              Binary input: 00000000000000001000000000000000 Binary output: 10000
+        32'h010000  :   encoder_out <= 5'h11;   // hi               Binary input: 00000000000000010000000000000000 Binary output: 10001
+        32'h020000  :   encoder_out <= 5'h12;   // lo               Binary input: 00000000000000100000000000000000 Binary output: 10010
+        32'h040000  :   encoder_out <= 5'h13;   // zhi              Binary input: 00000000000001000000000000000000 Binary output: 10011
+        32'h080000  :   encoder_out <= 5'h14;   // zlo              Binary input: 00000000000010000000000000000000 Binary output: 10100
+        32'h100000  :   encoder_out <= 5'h15;   // pc               Binary input: 00000000000100000000000000000000 Binary output: 10101
+        32'h200000  :   encoder_out <= 5'h16;   // mdr              Binary input: 00000000001000000000000000000000 Binary output: 10110
+        32'h400000  :   encoder_out <= 5'h17;   // inport           Binary input: 00000000010000000000000000000000 Binary output: 10111
+        32'h800000  :   encoder_out <= 5'h18;   // c_sign_extended  Binary input: 00000000100000000000000000000000 Binary output: 11000
+        default     :   encoder_out <= 5'h00;   // select nothing   Binary input: invalid Binary output: 00000
     endcase    
 end
 
