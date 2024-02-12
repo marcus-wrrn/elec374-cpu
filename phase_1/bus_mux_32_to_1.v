@@ -3,7 +3,7 @@ module bus_mux_32_to_1 (
     output reg [31:0] bus_mux_out,
 
     // 5 bit input from the encoder_32_to_5 to select the register to put on the bus
-    input [4:0] select_encoded,
+    input [4:0] select_signal,
     
     // up to 32 wire inputs because 5 bit select signal (24 for now)
     input [31:0] bus_mux_in_r0,
@@ -33,7 +33,7 @@ module bus_mux_32_to_1 (
 );
 
 always @ (*) begin
-	case (select_encoded)
+	case (select_signal)
         // Select the register to put on the bus based on the 5 bit input from the 32 to 5 encoder
         5'h01   :   bus_mux_out <= bus_mux_in_r0;
         5'h02   :   bus_mux_out <= bus_mux_in_r1;
