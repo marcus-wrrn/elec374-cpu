@@ -89,6 +89,7 @@ wire [31:0] r12_data;
 wire [31:0] r13_data;
 wire [31:0] r14_data;
 wire [31:0] r15_data;
+wire [31:0] y_data;
 wire [31:0] pc_data;
 wire [31:0] hi_data;
 wire [31:0] lo_data;
@@ -172,11 +173,10 @@ encoder_32_to_5 select_encoder(
     .encoder_out(select_encoded)
 );
 
-// TODO: Instantiate ALU
 alu alu(
     .c(alu_out),
     .op_code(op_code),
-    .a(y_out),
+    .a(y_data),
     .b(bus),
     .clk(clk)
 );
@@ -207,7 +207,6 @@ bus_mux_32_to_1 bus_mux(
     .bus_mux_in_zlo(zlo_data),
     .bus_mux_in_pc(pc_data),
     .bus_mux_in_mdr(mdr_data),
-    // TODO: Verify the following connections
     .bus_mux_in_inport(inport_data),
     .bus_mux_in_c_sign_extended(c_sign_extended_data)
 );

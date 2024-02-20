@@ -57,7 +57,7 @@ begin
 always @(Present_state)// do the required job ineach state
 begin
 	case (Present_state)              //assert the required signals in each clock cycle
-		Default: begin
+		Default: begin//0
 				PCout <= 0; Zlowout <= 0;  MDRout<= 0;
 				R2out <= 0;   R3out <= 0;   MARin <= 0;   ZLowIn <= 0;  
 				PCin <=0;   MDRin <= 0;   IRin  <= 0;   Yin <= 0;  
@@ -65,57 +65,57 @@ begin
 				HIin <= 0; LOin <= 0; ZHighIn <= 0; Cin <= 0; ZLowIn <= 0;
 				R1in <= 0; R2in <= 0; R3in <= 0; Mdatain <= 32'h00000000;
 		end
-		Reg_load1a: begin 
+		Reg_load1a: begin //1
 				Mdatain<= 32'h000000FF;
 				Read = 0; MDRin = 0;	
 				#10 Read <= 1; MDRin <= 1;  
 				#15 Read <= 0; MDRin <= 0;
 		end
-		Reg_load1b: begin
+		Reg_load1b: begin //2
 				#10 MDRout<= 1; R2in <= 1;  
 				#15 MDRout<= 0; R2in <= 0;     
 		end
-		Reg_load2a: begin 
+		Reg_load2a: begin //3
 				Mdatain <= 32'h0000000F;
 				#10 Read <= 1; MDRin <= 1;  
 				#15 Read <= 0; MDRin <= 0;
 		end
-		Reg_load2b: begin
+		Reg_load2b: begin //4
 				#10 MDRout<= 1; R3in <= 1;  
 				#15 MDRout<= 0; R3in <= 0;
 		end
-		Reg_load3a: begin 
+		Reg_load3a: begin //5
 				Mdatain <= 32'hFFFFFFFF;
 				#10 Read <= 1; MDRin <= 1;  
 				#15 Read <= 0; MDRin <= 0;
 		end
-		Reg_load3b: begin
+		Reg_load3b: begin //6
 				#10 MDRout<= 1; R1in <= 1;  
 				#15 MDRout<= 0; R1in <= 0;
 		end
 	
-		T0: begin
-				PCout<= 1; MARin <= 1; IncPC <= 1; ZLowIn <= 1;
+		T0: begin //7
+				PCout<= 1; MARin <= 1; IncPC <= 1; // ZLowIn <= 1; <-- Dont think this should be here!
 				#10 PCin <= 0; MDRout <=0; PCout<= 0; MARin <= 0; IncPC <= 0; ZLowIn <= 0;
 		end
-		T1: begin
-				Mdatain <= 32'h28918000; Read <= 1; MDRin <= 1; Zlowout<= 1; PCin <= 1; 
+		T1: begin //8
+				Mdatain <= 32'h28918000; Read <= 1; MDRin <= 1; PCin <= 1; // Zlowout<= 1; <-- Dont think this should be here!
 				#10 Read <= 0; MDRin <= 0; Zlowout<= 0; PCin <= 0; 
 				
 		end
-		T2: begin
+		T2: begin //9
 				#10 MDRout<= 1; IRin <= 1; 
 				#10 MDRout<= 0; IRin <= 0; 
 		end
-		T3: begin
+		T3: begin //a
 				R2out<= 1; Yin <= 1;  
 				#10 R2out<= 0; Yin <= 0;
 		end
-		T4: begin
-				R3out<= 1; op_code <= OR; ZLowIn <= 1; 
+		T4: begin //b FIXME
+				R3out<= 1; op_code <= AND; ZLowIn <= 1; 
 				#10 R3out<= 0; ZLowIn <= 0;
 		end
-		T5: begin
+		T5: begin //c FIXME
 				Zlowout<= 1; R1in <= 1; 
 				#10 Zlowout<= 0; R1in <= 0;
 		end
