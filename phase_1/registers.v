@@ -60,7 +60,7 @@ module pc_reg (
 
 	// Register behavior
 	always @ (posedge clk) begin
-		if (en && pc_increment)
+		if (pc_increment)
 			pc_out <= pc_out + 1;
 		else if (en)
 			pc_out = pc_in;

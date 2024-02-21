@@ -49,6 +49,7 @@ wire r15_enable;
 //wire zlo_enable;
 //wire zhi_enable;
 //wire pc_enable;
+//wire mar_enable;
 //wire mdr_enable;
 //wire ir_enable;
 wire c_sign_extended_enable;
@@ -76,6 +77,7 @@ wire hi_out = 0;
 wire lo_out = 0;
 wire zhi_out = 0;
 //wire zlo_out = 0;
+//wire mar_out = 0;
 //wire mdr_out = 0;
 wire inport_out = 0;
 wire c_sign_extended_out = 0;
@@ -131,9 +133,10 @@ reg_32_bit lo(clk, clr, lo_enable, bus, lo_data);
 reg_32_bit zlo(clk, clr, zlo_enable, alu_out[31:0], zlo_data);
 reg_32_bit zhi(clk, clr, zhi_enable, alu_out[63:32], zhi_data);
 reg_32_bit ir(clk, clr, ir_enable, bus, ir_data);
+reg_32_bit mar(clk, clr, mar_enable, bus, mar_data);
 reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
 reg_32_bit c_sign_extended(clk, clr, c_sign_extended_enable, bus, c_sign_extended_data);
-pc_reg pc(clk, pc_increment, pc_enable, bus, pc_data);
+pc_reg pc(clk, pc_enable, pc_increment, bus, pc_data);
 
 
 // Instantiate MDR Mux

@@ -37,6 +37,11 @@ localparam not_opcode = 5'b10010;
 // Select the internal result based on the opcode
 always @(*) begin
 	case (op_code) 
+		// FIXME: This is temporary for phase 1. This is to pass b to c when no op is selected
+		ld_opcode: begin
+			c[31:0] = b;
+			c[63:32] = 32'b0;
+		end
 
 		and_opcode: begin
 			c[31:0] = and_result;
