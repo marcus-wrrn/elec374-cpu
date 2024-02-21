@@ -1,16 +1,24 @@
-// TODO: Finish the datapath module
-
 module and_datapath (
-    input pc_out, zlo_out, mdr_out, mar_in, zlo_enable, pc_enable, mdr_enable, read, ir_enable, y_enable, pc_increment, 
-    input [4:0] op_code,
-    input [31:0] m_data_in,
-    // Specific Registers Used
+    input pc_out, 
+    input zlo_out,
+    input mdr_out, 
+    input mar_enable, 
+    input zlo_enable, 
+    input pc_enable, 
+    input mdr_enable, 
+    input read, 
+    input ir_enable, 
+    input y_enable, 
+    input pc_increment, 
     input r1_enable,
     input r2_enable,
     input r3_enable,
     input r2_out,
     input r3_out,
-    input clr, clk,
+    input clr, 
+    input clk,
+    input [4:0] op_code,
+    input [31:0] m_data_in,
     output [31:0] zlo_data
 );
 
@@ -122,10 +130,10 @@ reg_32_bit hi(clk, clr, hi_enable, bus, hi_data);
 reg_32_bit lo(clk, clr, lo_enable, bus, lo_data);
 reg_32_bit zlo(clk, clr, zlo_enable, alu_out[31:0], zlo_data);
 reg_32_bit zhi(clk, clr, zhi_enable, alu_out[63:32], zhi_data);
-reg_32_bit pc(clk, clr, pc_enable, bus, pc_data);
 reg_32_bit ir(clk, clr, ir_enable, bus, ir_data);
 reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
 reg_32_bit c_sign_extended(clk, clr, c_sign_extended_enable, bus, c_sign_extended_data);
+pc_reg pc(clk, pc_increment, pc_enable, bus, pc_data);
 
 
 // Instantiate MDR Mux
@@ -173,6 +181,7 @@ encoder_32_to_5 select_encoder(
     .encoder_out(select_encoded)
 );
 
+// Instantiate ALU
 alu alu(
     .c(alu_out),
     .op_code(op_code),
@@ -210,7 +219,5 @@ bus_mux_32_to_1 bus_mux(
     .bus_mux_in_inport(inport_data),
     .bus_mux_in_c_sign_extended(c_sign_extended_data)
 );
-
-
 
 endmodule
