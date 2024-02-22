@@ -8,9 +8,33 @@ module alu (
 
 // Intermediate wires for various operations
 wire [31:0] and_result;
+wire [31:0] or_result;
+wire [31:0] add_result;
+wire [31:0] sub_result;
+wire [63:0] mul_result;
+wire [63:0] div_result;
+wire [31:0] shr_result;
+wire [31:0] shra_result;
+wire [31:0] shl_result;
+wire [31:0] ror_result;
+wire [31:0] rol_result;
+wire [31:0] neg_result;
+wire [31:0] not_result;
 
 // Instantiation of modules for operations
 logical_and and_op(.a(a), .b(b), .result(and_result));
+logical_or or_op(.a(a), .b(b), .result(or_result));
+add add_op(.a(a), .b(b), .result(add_result));
+sub sub_op(.a(a), .b(b), .result(sub_result));
+mul mul_op(.a(a), .b(b), .result(mul_result));
+div div_op(.a(a), .b(b), .result(div_result));
+shr shr_op(.a(a), .b(b), .result(shr_result));
+shra shra_op(.a(a), .b(b), .result(shra_result));
+shl shl_op(.a(a), .b(b), .result(shl_result));
+ror ror_op(.a(a), .b(b), .result(ror_result));
+rol rol_op(.a(a), .b(b), .result(rol_result));
+logical_neg neg_op(.a(a), .result(neg_result));
+logical_not not_op(.a(a), .result(not_result));
 
 // Opcodes for operations
 localparam ld_opcode = 5'b00000;
@@ -37,12 +61,76 @@ localparam not_opcode = 5'b10010;
 // Select the internal result based on the opcode
 always @(*) begin
 	case (op_code) 
+		// FIXME: This is temporary for phase 1. This is to pass b to c when no op is selected
+		ld_opcode: begin
+			c[31:0] = b;
+			c[63:32] = 32'b0;
+		end
 
 		and_opcode: begin
 			c[31:0] = and_result;
 			c[63:32] = 32'b0;
 		end
 
+		or_opcode: begin
+			c[31:0] = or_result;
+			c[63:32] = 32'b0;
+		end
+
+		add_opcode: begin
+			c[31:0] = add_result;
+			c[63:32] = 32'b0;
+		end
+
+		sub_opcode: begin
+			c[31:0] = sub_result;
+			c[63:32] = 32'b0;
+		end
+
+		mul_opcode: begin
+			c[31:0] = mul_result[31:0];
+			c[63:32] = mul_result[63:32];
+		end
+
+		div_opcode: begin
+			c[31:0] = div_result[31:0];
+			c[63:32] = div_result[63:32];
+		end
+
+		shr_opcode: begin
+			c[31:0] = shr_result;
+			c[63:32] = 32'b0;
+		end
+
+		shra_opcode: begin
+			c[31:0] = shra_result;
+			c[63:32] = 32'b0;
+		end
+
+		shl_opcode: begin
+			c[31:0] = shl_result;
+			c[63:32] = 32'b0;
+		end
+
+		ror_opcode: begin
+			c[31:0] = ror_result;
+			c[63:32] = 32'b0;
+		end
+
+		rol_opcode: begin
+			c[31:0] = rol_result;
+			c[63:32] = 32'b0;
+		end
+
+		neg_opcode: begin
+			c[31:0] = neg_result;
+			c[63:32] = 32'b0;
+		end
+
+		not_opcode: begin
+			c[31:0] = not_result;
+			c[63:32] = 32'b0;
+		end
 	endcase
 end
 

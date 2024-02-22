@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module and_datapath_tb; 	
+module or_datapath_tb; 	
 reg pc_out; 
 reg zlo_out; 
 reg mdr_out; 
@@ -61,7 +61,7 @@ parameter neg_opcode = 5'b10001;
 parameter not_opcode = 5'b10010;
 
 // Instantiate the DUT
-and_datapath DUT(
+or_datapath DUT(
 	.pc_out(pc_out), 
 	.zlo_out(zlo_out), 
 	.mdr_out(mdr_out), 
@@ -138,9 +138,9 @@ begin
 		end
 		
 		// present_state: 1
-		// Load 0xF0F0F0F0 into MDR
+		// Load 0xA0A0A0A0 into MDR
 		reg_load1a: begin
-			m_data_in <= 32'hF0F0F0F0;
+			m_data_in <= 32'hA0A0A0A0;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
@@ -153,9 +153,9 @@ begin
 		end
 
 		// present_state: 3
-		// Load 0xFFFFFFFF into MDR
+		// Load 0x00000000 into MDR
 		reg_load2a: begin
-			m_data_in <= 32'hFFFFFFFF;
+			m_data_in <= 32'h00000000;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
@@ -215,7 +215,7 @@ begin
 		// present_state: b
 		// Put R3 into alu.b and put or opcode into ALU. Store ALU restults in ZLO
 		T4: begin
-			r3_out<= 1; op_code <= and_opcode; z_enable <= 1; 
+			r3_out<= 1; op_code <= or_opcode; z_enable <= 1; 
 			#20 r3_out<= 0; z_enable <= 0;
 		end
 
@@ -223,7 +223,7 @@ begin
 		// Store ZLO into R1
 		T5: begin	
 			zlo_out<= 1; r1_enable <= 1; 
-			// zlo_out<= 0; r1_enable <= 0;
+			#20 zlo_out<= 0; r1_enable <= 0;
 		end
 	endcase
 end
