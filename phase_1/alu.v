@@ -8,9 +8,11 @@ module alu (
 
 // Intermediate wires for various operations
 wire [31:0] and_result;
+wire [31:0] or_result;
 
 // Instantiation of modules for operations
 logical_and and_op(.a(a), .b(b), .result(and_result));
+logical_or or_op(.a(a), .b(b), .result(or_result));
 
 // Opcodes for operations
 localparam ld_opcode = 5'b00000;
@@ -45,6 +47,11 @@ always @(*) begin
 
 		and_opcode: begin
 			c[31:0] = and_result;
+			c[63:32] = 32'b0;
+		end
+
+		or_opcode: begin
+			c[31:0] = or_result;
 			c[63:32] = 32'b0;
 		end
 
