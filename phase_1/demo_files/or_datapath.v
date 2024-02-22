@@ -3,7 +3,7 @@ module or_datapath (
     input zlo_out,
     input mdr_out, 
     input mar_enable, 
-    input zlo_enable, 
+    input z_enable, 
     input pc_enable, 
     input mdr_enable, 
     input read, 
@@ -46,8 +46,8 @@ wire r15_enable;
 //wire y_enable;
 //wire hi_enable;
 //wire lo_enable;
-//wire zlo_enable;
-//wire zhi_enable;
+//wire z_enable;
+//wire z_enable;
 //wire pc_enable;
 //wire mar_enable;
 //wire mdr_enable;
@@ -130,8 +130,8 @@ reg_32_bit r15(clk, clr, r15_enable, bus, r15_data);
 reg_32_bit y(clk, clr, y_enable, bus, y_data);
 reg_32_bit hi(clk, clr, hi_enable, bus, hi_data);
 reg_32_bit lo(clk, clr, lo_enable, bus, lo_data);
-reg_32_bit zlo(clk, clr, zlo_enable, alu_out[31:0], zlo_data);
-reg_32_bit zhi(clk, clr, zhi_enable, alu_out[63:32], zhi_data);
+reg_32_bit zlo(clk, clr, z_enable, alu_out[31:0], zlo_data);
+reg_32_bit zhi(clk, clr, z_enable, alu_out[63:32], zhi_data);
 reg_32_bit ir(clk, clr, ir_enable, bus, ir_data);
 reg_32_bit mar(clk, clr, mar_enable, bus, mar_data);
 reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);

@@ -5,7 +5,7 @@ reg pc_out;
 reg zlo_out; 
 reg mdr_out; 
 reg mar_enable; 
-reg zlo_enable;
+reg z_enable;
 reg pc_enable; 
 reg mdr_enable; 
 reg read;
@@ -66,7 +66,7 @@ or_datapath DUT(
 	.zlo_out(zlo_out), 
 	.mdr_out(mdr_out), 
 	.mar_enable(mar_enable), 
-	.zlo_enable(zlo_enable), 
+	.z_enable(z_enable), 
 	.pc_enable(pc_enable), 
 	.mdr_enable(mdr_enable), 
 	.read(read), 
@@ -130,9 +130,9 @@ begin
 		start: begin	
 			pc_out <= 0; zlo_out <= 0; mdr_out <= 0;
 			r2_out <= 0; r3_out <= 0; mar_enable <= 0;
-			zlo_enable <= 0; pc_enable <= 0; mdr_enable <= 0;
+			z_enable <= 0; pc_enable <= 0; mdr_enable <= 0;
 			ir_enable <= 0; y_enable <= 0; pc_increment <= 0;   
-			read <= 0; op_code <= 0; zlo_enable <= 0;
+			read <= 0; op_code <= 0; z_enable <= 0;
 			r1_enable <= 0; r2_enable <= 0; r3_enable <= 0; 
 			m_data_in <= 32'h00000000;
 		end
@@ -186,8 +186,8 @@ begin
 		// Load PC into MAR and increment PC. Load incremented PC into Z.
 		T0: begin
 			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
-			#20 mar_enable <= 0; pc_increment <= 0; zlo_enable <= 1;
-			#20 pc_out <= 0; zlo_enable <= 0;
+			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
+			#20 pc_out <= 0; z_enable <= 0;
 		end
 
 		// present_state: 8
@@ -215,8 +215,8 @@ begin
 		// present_state: b
 		// Put R3 into alu.b and put or opcode into ALU. Store ALU restults in ZLO
 		T4: begin
-			r3_out<= 1; op_code <= or_opcode; zlo_enable <= 1; 
-			#20 r3_out<= 0; zlo_enable <= 0;
+			r3_out<= 1; op_code <= or_opcode; z_enable <= 1; 
+			#20 r3_out<= 0; z_enable <= 0;
 		end
 
 		// present_state: c
