@@ -140,7 +140,7 @@ begin
 		// present_state: 1
 		// Load 0xFF into MDR
 		reg_load1a: begin
-			m_data_in <= 32'h000000FF;
+			m_data_in <= 32'hF0F0F0F0;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
@@ -155,7 +155,7 @@ begin
 		// present_state: 3
 		// Load 0xF into MDR
 		reg_load2a: begin
-			m_data_in <= 32'h0000000F;
+			m_data_in <= 32'hFFFFFFFF;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
@@ -183,7 +183,7 @@ begin
 		end
 	
 		// present_state: 7
-		// Load PC into MAR, increment PC and store in ZLO
+		// Load PC into MAR and increment PC. Load incremented PC into Z.
 		T0: begin
 			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
 			#20 mar_enable <= 0; pc_increment <= 0; zlo_enable <= 1;
@@ -199,28 +199,28 @@ begin
 		end
 
 		// present_state: 9
-		// 
+		// Load MDR into IR
 		T2: begin
 			mdr_out<= 1; ir_enable <= 1; 
 			#20 mdr_out<= 0; ir_enable <= 0; 
 		end
 
 		// present_state: a
-		// 
+		// Load R2 into Y
 		T3: begin	
 			r2_out<= 1; y_enable <= 1;
 			#20 r2_out<= 0; y_enable <= 0;  
 		end
 
 		// present_state: b
-		// 
+		// Put R3 into alu.b and put or opcode into ALU. Store ALU restults in ZLO
 		T4: begin
 			r3_out<= 1; op_code <= and_opcode; zlo_enable <= 1; 
 			#20 r3_out<= 0; zlo_enable <= 0;
 		end
 
 		// present_state: c
-		// 
+		// Store ZLO into R1
 		T5: begin	
 			zlo_out<= 1; r1_enable <= 1; 
 			// zlo_out<= 0; r1_enable <= 0;
