@@ -92,23 +92,34 @@ initial begin
 	forever #10 clk = ~ clk;
 end
 
-// FSM change on positive edge of clock
-always @(posedge clk)	
+// FSM changes on positive edge of clock every two clock cycles
+reg toggle = 0;
+
+// Toggle the counter on every clock cycle
+always @(posedge clk)
 begin
-	case (present_state)
-		start			:	present_state = reg_load1a;
-		reg_load1a		:	present_state = reg_load1b;
-		reg_load1b		:	present_state = reg_load2a;
-		reg_load2a		:	present_state = reg_load2b;
-		reg_load2b		:	present_state = reg_load3a;
-		reg_load3a		:	present_state = reg_load3b;
-		reg_load3b		:	present_state = T0;
-		T0				:	present_state = T1;
-		T1				:	present_state = T2;
-		T2				:	present_state = T3;
-		T3				:	present_state = T4;
-		T4				:	present_state = T5;
-	endcase
+    toggle <= ~toggle;
+end
+
+always @(posedge clk)
+begin
+    if (toggle == 1)  // Check if toggle is set to change the state
+    begin
+        case (present_state)
+            start       : present_state = reg_load1a;
+            reg_load1a  : present_state = reg_load1b;
+            reg_load1b  : present_state = reg_load2a;
+            reg_load2a  : present_state = reg_load2b;
+            reg_load2b  : present_state = reg_load3a;
+            reg_load3a  : present_state = reg_load3b;
+            reg_load3b  : present_state = T0;
+            T0          : present_state = T1;
+            T1          : present_state = T2;
+            T2          : present_state = T3;
+            T3          : present_state = T4;
+            T4          : present_state = T5;
+        endcase
+    end
 end
 
 always @(present_state)
@@ -131,85 +142,86 @@ begin
 		reg_load1a: begin
 			m_data_in <= 32'h000000FF;
 			read <= 1; mdr_enable <= 1;
+			#20 read <= 0; mdr_enable <= 0;
 		end
 
 		// present_state: 2
 		// Load MDR into R2
 		reg_load1b: begin
-			read <= 0; mdr_enable <= 0;
 			mdr_out <= 1; r2_enable <= 1;
+			#20 mdr_out <= 0; r2_enable <= 0;
 		end
 
 		// present_state: 3
 		// Load 0xF into MDR
 		reg_load2a: begin
-			mdr_out <= 0; r2_enable <= 0;  
 			m_data_in <= 32'h0000000F;
 			read <= 1; mdr_enable <= 1;
+			#20 read <= 0; mdr_enable <= 0;
 		end
 		
 		// present_state: 4
 		// Load MDR into R3
 		reg_load2b: begin	
-			read <= 0; mdr_enable <= 0;
 			mdr_out <= 1; r3_enable <= 1;
+			#20 mdr_out <= 0; r3_enable <= 0;
 		end
 		
 		// present_state: 5
 		// Load 0xFFFFFFFF into MDR
 		reg_load3a: begin	
-			mdr_out <= 0; r3_enable <= 0;
 			m_data_in <= 32'hFFFFFFFF;
-			read <= 1; mdr_enable <= 1;  
+			read <= 1; mdr_enable <= 1;
+			#20 read <= 0; mdr_enable <= 0;   
 		end
 		
 		// present_state: 6
 		// Load MDR into R1
 		reg_load3b: begin
-			read <= 0; mdr_enable <= 0;
-			mdr_out <= 1; r1_enable <= 1;  
+			mdr_out <= 1; r1_enable <= 1;
+			#20 mdr_out <= 0; r1_enable <= 0;  
 		end
 	
 		// present_state: 7
-		// Load PC into MAR and increment PC.
+		// Load PC into MAR, increment PC and store in ZLO
 		T0: begin
-			mdr_out <= 0; r1_enable <= 0;
-			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; zlo_enable <= 1;
+			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
+			#20 mar_enable <= 0; pc_increment <= 0; zlo_enable <= 1;
+			#20 pc_out <= 0; zlo_enable <= 0;
 		end
 
 		// present_state: 8
-		// Load "AND R1, R2, R3" into PC
+		// Load "AND R1, R2, R3" into MDR, Load ZLO back into PC
 		T1: begin
-			pc_out <= 0; mar_enable <= 0; pc_increment <= 0; zlo_enable <= 0;
 			m_data_in <= 32'h28918000; 
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
+			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;		
 		end
 
 		// present_state: 9
 		// 
 		T2: begin
-			read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 			mdr_out<= 1; ir_enable <= 1; 
+			#20 mdr_out<= 0; ir_enable <= 0; 
 		end
 
 		// present_state: a
 		// 
 		T3: begin	
-			mdr_out<= 0; ir_enable <= 0; 
-			r2_out<= 1; y_enable <= 1;  
+			r2_out<= 1; y_enable <= 1;
+			#20 r2_out<= 0; y_enable <= 0;  
 		end
 
 		// present_state: b
 		// 
 		T4: begin
-			r2_out<= 0; y_enable <= 0;
 			r3_out<= 1; op_code <= and_opcode; zlo_enable <= 1; 
+			#20 r3_out<= 0; zlo_enable <= 0;
 		end
 
 		// present_state: c
 		// 
 		T5: begin	
-			r3_out<= 0; zlo_enable <= 0;
 			zlo_out<= 1; r1_enable <= 1; 
 			// zlo_out<= 0; r1_enable <= 0;
 		end
