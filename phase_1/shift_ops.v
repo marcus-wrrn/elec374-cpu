@@ -14,7 +14,7 @@ module shra(input wire[31:0] a, input wire[31:0] b, output wire[31:0] result);
 endmodule
 
 // Shift left
-module sl(input wire[31:0] a, input wire[31:0] b, output wire[31:0] result);
+module shl(input wire[31:0] a, input wire[31:0] b, output wire[31:0] result);
 
 	assign result = a << b;
 
