@@ -7,9 +7,17 @@ endmodule
 
 
 // Arithmetic shift right
-module shra(input wire[31:0] a, input wire[31:0] b, output wire[31:0] result);
+module shra(input wire[31:0] a, input wire[31:0] b, output reg[31:0] result);
 
-	assign result = a >>> b;
+    always @(*) begin
+        // Perform the shift
+        result = a >>> b;
+
+        // If the original number was negative, fill in the shifted bits with 1s
+        if (a[31]) begin
+            result = result | ((32'hFFFFFFFF << (32-b)));
+        end
+    end
 
 endmodule
 
