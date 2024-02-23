@@ -24,10 +24,10 @@ wire [31:0] not_result;
 // Instantiation of modules for operations
 logical_and and_op(.a(a), .b(b), .result(and_result));
 logical_or or_op(.a(a), .b(b), .result(or_result));
-add add_op(.a(a), .b(b), .result(add_result));
-sub sub_op(.a(a), .b(b), .result(sub_result));
-mul mul_op(.a(a), .b(b), .result(mul_result));
-div div_op(.a(a), .b(b), .result(div_result));
+// add add_op(.a(a), .b(b), .result(add_result));
+// sub sub_op(.a(a), .b(b), .result(sub_result));
+// mul mul_op(.a(a), .b(b), .result(mul_result));
+// div div_op(.a(a), .b(b), .result(div_result));
 shr shr_op(.a(a), .b(b), .result(shr_result));
 shra shra_op(.a(a), .b(b), .result(shra_result));
 shl shl_op(.a(a), .b(b), .result(shl_result));
@@ -35,6 +35,11 @@ ror ror_op(.a(a), .b(b), .result(ror_result));
 rol rol_op(.a(a), .b(b), .result(rol_result));
 logical_neg neg_op(.a(a), .result(neg_result));
 logical_not not_op(.a(a), .result(not_result));
+
+
+
+
+
 
 // Opcodes for operations
 localparam ld_opcode = 5'b00000;
