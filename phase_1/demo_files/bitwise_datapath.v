@@ -1,4 +1,4 @@
-module and_datapath (
+module bitwise_datapath (
     input pc_out, 
     input zlo_out,
     input mdr_out, 
