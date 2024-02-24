@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module and_datapath_tb; 	
+module and_tb; 	
 reg pc_out; 
 reg zlo_out; 
 reg mdr_out; 
@@ -61,7 +61,7 @@ parameter neg_opcode = 5'b10001;
 parameter not_opcode = 5'b10010;
 
 // Instantiate the DUT
-and_datapath DUT(
+bitwise_datapath DUT(
 	.pc_out(pc_out), 
 	.zlo_out(zlo_out), 
 	.mdr_out(mdr_out), 
@@ -201,14 +201,14 @@ begin
 		// present_state: 9
 		// Load MDR into IR
 		T2: begin
-			mdr_out<= 1; ir_enable <= 1; 
+			mdr_out <= 1; ir_enable <= 1; 
 			#20 mdr_out<= 0; ir_enable <= 0; 
 		end
 
 		// present_state: a
 		// Load R2 into Y
 		T3: begin	
-			r2_out<= 1; y_enable <= 1;
+			r2_out <= 1; y_enable <= 1;
 			#20 r2_out<= 0; y_enable <= 0;  
 		end
 
@@ -223,7 +223,7 @@ begin
 		// Store ZLO into R1
 		T5: begin	
 			zlo_out<= 1; r1_enable <= 1; 
-			// zlo_out<= 0; r1_enable <= 0;
+			#20 zlo_out<= 0; r1_enable <= 0;
 		end
 	endcase
 end
