@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module mul_div_tb; 	
+module mul_tb; 	
     reg pc_out; 
     reg zlo_out; 
     reg zhi_out;
@@ -16,10 +16,10 @@ module mul_div_tb;
     reg y_enable;
     reg pc_increment; 
     //reg r1_enable; 
-    reg r2_enable; 
-    reg r3_enable;
-    reg r2_out; 
-    reg r3_out;
+    reg r4_enable; 
+    reg r5_enable;
+    reg r4_out; 
+    reg r5_out;
     reg clk; 
     reg clr;
     reg [4:0] op_code; 
@@ -83,10 +83,10 @@ module mul_div_tb;
         .m_data_in(m_data_in),
         // removed r1
         //.r1_enable(r1_enable),
-        .r2_enable(r2_enable),
-        .r3_enable(r3_enable),
-        .r2_out(r2_out),
-        .r3_out(r3_out),
+        .r4_enable(r4_enable),
+        .r5_enable(r5_enable),
+        .r4_out(r4_out),
+        .r5_out(r5_out),
         .clr(clr), 
         .clk(clk),
         .zlo_data(zlo_data)
@@ -131,7 +131,7 @@ module mul_div_tb;
             // Set all signals to 0
             start: begin	
                 pc_out <= 0; zlo_out <= 0; mdr_out <= 0;
-                r2_out <= 0; r3_out <= 0; mar_enable <= 0;
+                r4_out <= 0; r5_out <= 0; mar_enable <= 0;
                 z_enable <= 0; pc_enable <= 0; mdr_enable <= 0;
                 ir_enable <= 0; y_enable <= 0; pc_increment <= 0;   
                 read <= 0; op_code <= 0; z_enable <= 0;
@@ -150,8 +150,8 @@ module mul_div_tb;
             // present_state: 2
             // Load MDR into R2
             reg_load1b: begin
-                mdr_out <= 1; r2_enable <= 1;
-                #20 mdr_out <= 0; r2_enable <= 0;
+                mdr_out <= 1; r4_enable <= 1;
+                #20 mdr_out <= 0; r4_enable <= 0;
             end
 
             // present_state: 3
@@ -165,24 +165,9 @@ module mul_div_tb;
             // present_state: 4
             // Load MDR into R3
             reg_load2b: begin	
-                mdr_out <= 1; r3_enable <= 1;
-                #20 mdr_out <= 0; r3_enable <= 0;
+                mdr_out <= 1; r5_enable <= 1;
+                #20 mdr_out <= 0; r5_enable <= 0;
             end
-            
-            // // present_state: 5
-            // // Load 0xFFFFFFFF into MDR
-            // reg_load3a: begin	
-            //     m_data_in <= 32'hFFFFFFFF;
-            //     read <= 1; mdr_enable <= 1;
-            //     #20 read <= 0; mdr_enable <= 0;   
-            // end
-            
-            // // present_state: 6
-            // // Load MDR into R1
-            // reg_load3b: begin
-            //     mdr_out <= 1; r1_enable <= 1;
-            //     #20 mdr_out <= 0; r1_enable <= 0;  
-            // end
         
             // present_state: 5
             // Load PC into MAR and increment PC. 
@@ -200,7 +185,7 @@ module mul_div_tb;
                 #20 read <= 0; mdr_enable <= 0; pc_enable <= 0; //zlo_out <= 0;		
             end
 
-            // present_state: 9
+            // present_state: 7
             // Load MDR into IR
             T2: begin
                 mdr_out<= 1; ir_enable <= 1; 
@@ -210,16 +195,16 @@ module mul_div_tb;
             // present_state: a
             // Load R2 into Y
             T3: begin	
-                r2_out<= 1; y_enable <= 1;
-                #20 r2_out<= 0; y_enable <= 0;  
+                r4_out<= 1; y_enable <= 1;
+                #20 r4_out<= 0; y_enable <= 0;  
             end
 
             // present_state: b
             // Put R3 into alu.b and put or opcode into ALU. Store ALU restults in ZLO
             // Replace mul_opcode with div_opcode to test for division
             T4: begin
-                r3_out<= 1; op_code <= mul_opcode; z_enable <= 1; 
-                #20 r3_out<= 0; z_enable <= 0;
+                r5_out<= 1; op_code <= mul_opcode; z_enable <= 1; 
+                #20 r5_out<= 0; z_enable <= 0;
             end
 
             // present_state: c

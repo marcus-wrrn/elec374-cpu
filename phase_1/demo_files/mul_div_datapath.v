@@ -14,10 +14,10 @@ module mul_div_datapath (
     input y_enable, 
     input pc_increment, 
     //input r1_enable,
-    input r2_enable,
-    input r3_enable,
-    input r2_out,
-    input r3_out,
+    input r4_enable,
+    input r5_enable,
+    input r4_out,
+    input r5_out,
     input clr, 
     input clk,
     input [4:0] op_code,
@@ -33,10 +33,10 @@ wire [63:0] alu_out;
 // Register enable signals
 wire r0_enable;
 wire r1_enable;
-// wire r2_enable;
-// wire r3_enable;
-wire r4_enable;
-wire r5_enable;
+wire r2_enable;
+wire r3_enable;
+//wire r4_enable;
+//wire r5_enable;
 wire r6_enable;
 wire r7_enable;
 wire r8_enable;
@@ -61,10 +61,10 @@ wire c_sign_extended_enable;
 // Register output flags
 wire r0_out = 0;
 wire r1_out = 0;
-// wire r2_out = 0;
-// wire r3_out = 0;
-wire r4_out = 0;
-wire r5_out = 0;
+wire r2_out = 0;
+wire r3_out = 0;
+//wire r4_out = 0;
+//wire r5_out = 0;
 wire r6_out = 0;
 wire r7_out = 0;
 wire r8_out = 0;
