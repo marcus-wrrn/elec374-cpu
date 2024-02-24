@@ -1,4 +1,4 @@
-module divide(input [31:0] in_a, in_b, output reg[63:0] out);
+module div(input [31:0] in_a, in_b, output reg[63:0] out);
     // Implements non restoring division
     reg [31:0] m, q;
     reg [32:0] a;
