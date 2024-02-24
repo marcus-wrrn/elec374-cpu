@@ -38,7 +38,7 @@ module mul(input signed [31:0] m, q, output [63:0] out)
         end
         sum = shifted_hold[0];
         for(i = 1; i < 16; i = i + 1) begin
-            sum = sum + shifted_hold[i]
+            sum = sum + shifted_hold[i];
         end
     end
     assign out = sum;
