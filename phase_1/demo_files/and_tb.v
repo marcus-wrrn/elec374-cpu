@@ -223,7 +223,7 @@ begin
 		// Store ZLO into R1
 		T5: begin	
 			zlo_out<= 1; r1_enable <= 1; 
-			// zlo_out<= 0; r1_enable <= 0;
+			#20 zlo_out<= 0; r1_enable <= 0;
 		end
 	endcase
 end
