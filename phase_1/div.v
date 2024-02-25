@@ -1,43 +1,35 @@
-module div(input [31:0] in_a, in_b, output reg[63:0] out);
-    // Implements non restoring division
-    reg [31:0] m, q;
-    reg [32:0] a;
-    reg [32:0] abs_a;
+module div(input [31:0] a, b, output reg[63:0] result);
 
+    // Internal variables
+    reg [31:0] quotient, remainder, divisor;
+    reg [31:0] temp_remainder;
     integer i;
+
     always @(*) begin
-       if (in_a[31] == 1) begin
-            abs_a = -in_a;
-       end 
-       else begin
-            abs_a = in_a;
-            q = abs_a;
-            m = in_b;
-            a = 0;
+        // Initialize variables
+        quotient = 0;
+        remainder = 0;
+        divisor = b;
+        temp_remainder = a; // Start with the dividend
 
-            for (i = 0; i < 32; i = i + 1) begin
-                a = {a[30:0], q[31]};
-                q[31:1] = q[30:0];
-
-                if (a[31]) begin
-                    a = a + m;    
-                    q[0] = 0;
-                end 
-                else begin
-                    a = a - m;
-                    q[0] = 1;
-                end
+        // Main loop for non-restoring division
+        for (i = 31; i >= 0; i = i - 1) begin
+            // Shift left to make room for the next bit
+            remainder = remainder << 1;
+            remainder[0] = temp_remainder[31]; // Bring down the next bit of the dividend
+            temp_remainder = temp_remainder << 1; // Prepare the temp remainder for the next iteration
+            
+            // Attempt to subtract the divisor from the remainder
+            if (remainder >= divisor) begin
+                remainder = remainder - divisor;
+                quotient = (quotient << 1) | 1; // Set the current bit of the quotient to 1
+            end else begin
+                quotient = quotient << 1; // Keep the current bit of the quotient as 0
             end
+        end
 
-            if (a[31]) begin
-                a = a + m;
-            end
-            if (in_a[31]) begin
-                q = -q;
-            end
-
-            out[31:0] = q[31:0];
-            out[63:32] = a[31:0];
-       end
+        // Combine quotient and remainder for the result
+       result[31:0] = quotient;
+       result[63:32] = remainder; 
     end
 endmodule

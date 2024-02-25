@@ -27,7 +27,7 @@ logical_or or_op(.a(a), .b(b), .result(or_result));
 // add add_op(.a(a), .b(b), .result(add_result));
 // sub sub_op(.a(a), .b(b), .result(sub_result));
 mul mul_op(.m(a), .q(b), .out(mul_result));
-div div_op(.in_a(a), .in_b(b), .out(div_result));
+div div_op(.a(a), .b(b), .result(div_result));
 shr shr_op(.a(a), .b(b), .result(shr_result));
 shra shra_op(.a(a), .b(b), .result(shra_result));
 shl shl_op(.a(a), .b(b), .result(shl_result));
