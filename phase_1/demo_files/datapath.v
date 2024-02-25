@@ -1,6 +1,7 @@
-module bitwise_datapath (
+module datapath (
     input pc_out, 
     input zlo_out,
+    input zhi_out,
     input mdr_out, 
     input mar_enable, 
     input z_enable, 
@@ -13,8 +14,18 @@ module bitwise_datapath (
     input r1_enable,
     input r2_enable,
     input r3_enable,
+    input r4_enable,
+    input r5_enable,
+    input r6_enable,
+    input r7_enable,
+    input lo_enable,
+    input hi_enable,
     input r2_out,
     input r3_out,
+    input r4_out,
+    input r5_out,
+    input r6_out,
+    input r7_out,
     input clr, 
     input clk,
     input [4:0] op_code,
@@ -31,10 +42,10 @@ wire r0_enable;
 // wire r1_enable;
 // wire r2_enable;
 // wire r3_enable;
-wire r4_enable;
-wire r5_enable;
-wire r6_enable;
-wire r7_enable;
+// wire r4_enable;
+// wire r5_enable;
+// wire r6_enable;
+// wire r7_enable;
 wire r8_enable;
 wire r9_enable;
 wire r10_enable;
@@ -59,10 +70,10 @@ wire r0_out = 0;
 wire r1_out = 0;
 // wire r2_out = 0;
 // wire r3_out = 0;
-wire r4_out = 0;
-wire r5_out = 0;
-wire r6_out = 0;
-wire r7_out = 0;
+// wire r4_out = 0;
+// wire r5_out = 0;
+// wire r6_out = 0;
+// wire r7_out = 0;
 wire r8_out = 0;
 wire r9_out = 0;
 wire r10_out = 0;
@@ -75,7 +86,7 @@ wire r15_out = 0;
 wire y_out = 0;
 wire hi_out = 0;
 wire lo_out = 0;
-wire zhi_out = 0;
+// wire zhi_out = 0;
 //wire zlo_out = 0;
 //wire mar_out = 0;
 //wire mdr_out = 0;

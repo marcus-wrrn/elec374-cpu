@@ -1,4 +1,4 @@
-module mul(input signed [31:0] m, q, output [63:0] out)
+module mul(input signed [31:0] m, q, output [63:0] out);
 
     reg [2:0] bit_pairs [15:0];
     reg signed [32:0] hold [15:0];
@@ -13,7 +13,7 @@ module mul(input signed [31:0] m, q, output [63:0] out)
         // Implement bit pair recoding
         bit_pairs[0] = {q[1], q[0], 1'b0};
         for(i = 1; i < 16; i = i + 1) begin
-            bit_pairs[i] = {q[2*i+1], q[2*i], q[2*i-1]}
+            bit_pairs[i] = {q[2*i+1], q[2*i], q[2*i-1]};
         end
 
         for(i = 0; i < 16; i = i + 1) begin
@@ -24,17 +24,18 @@ module mul(input signed [31:0] m, q, output [63:0] out)
                 3'b101, 3'b110 : hold[i] = neg_m;
                 default: hold[i] = 0;
 
-                // If manual shift does not work uncomment this line and use this instead
-                // shifted_hold[i] = hold[i] << (2*i)
+                
             endcase
-
+				// If manual shift does not work uncomment this line and use this instead
+                shifted_hold[i] = hold[i] << (2*i);
+					 
             // Perform manual shift
-            shifted_hold[i] = 0;
-            for(j = 0; j < (32-2*i); j = j + 1) begin
-                if (j + 2*i < 32) begin
-                    shifted_hold[i][j+2*i] = hold[i][j];
-                end
-            end
+            // shifted_hold[i] = 0;
+            // for(j = 0; j < (32-2*i); j = j + 1) begin
+            //     if (j + 2*i < 32) begin
+            //         shifted_hold[i][j+2*i] = hold[i][j];
+            //     end
+            // end
         end
         sum = shifted_hold[0];
         for(i = 1; i < 16; i = i + 1) begin
