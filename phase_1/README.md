@@ -34,11 +34,15 @@ R1 = 0xA1A1A1A1
 
 ### ADD
 
+![ADD testbench waveforms](/phase_1/images/add_tb.png)
+
 ```verilog
 add R1, R2, R3
 ```
 
 ### SUB
+
+![SUB testbench waveforms](/phase_1/images/sub_tb.png)
 
 ```verilog
 sub R1, R2, R3
@@ -46,9 +50,11 @@ sub R1, R2, R3
 
 ### MUL
 
+![MUL testbench waveforms](/phase_1/images/mul_tb.png)
+
 ```verilog
-R4 = 11111111
-R5 = 11111111
+R4 = 0x11111111
+R5 = 0x11111111
 
 mul R4, R5
 
@@ -59,6 +65,8 @@ LO =
 
 ### DIV
 
+![DIV testbench waveforms](/phase_1/images/div_tb.png)
+
 ```verilog
 div R4, R5
 
@@ -67,11 +75,15 @@ div R4, R5
 
 ### SHR
 
+![SHR testbench waveforms](/phase_1/images/shr_tb.png)
+
 ```verilog
 shr R1, R2, R3
 ```
 
 ### SHRA
+
+![SHRA testbench waveforms](/phase_1/images/shra_tb.png)
 
 ```verilog
 shra R1, R2, R3
@@ -79,11 +91,15 @@ shra R1, R2, R3
 
 ### SHL
 
+![SHL testbench waveforms](/phase_1/images/shl_tb.png)
+
 ```verilog
 shl R1, R2, R3
 ```
 
 ### ROR
+
+![ROR testbench waveforms](/phase_1/images/ror_tb.png)
 
 ```verilog
 ror R1, R2, R3
@@ -91,11 +107,15 @@ ror R1, R2, R3
 
 ### ROL
 
+![ROL testbench waveforms](/phase_1/images/rol_tb.png)
+
 ```verilog
 rol R1, R2, R3
 ```
 
 ### NEG
+
+![NEG testbench waveforms](/phase_1/images/neg_tb.png)
 
 ```verilog
 neg R6, R7
@@ -103,6 +123,14 @@ neg R6, R7
 
 ### NOT
 
+![NOT testbench waveforms](/phase_1/images/not_tb.png)
+
 ```verilog
 not R6, R7
+```
+
+## Testbench Code
+
+```
+
 ```
