@@ -1,11 +1,14 @@
 `timescale 1ns/10ps
 
-module or_datapath_tb; 	
+module or_tb; 	
 reg pc_out; 
 reg zlo_out; 
+reg zhi_out;
 reg mdr_out; 
 reg mar_enable; 
 reg z_enable;
+reg lo_enable;
+reg hi_enable;
 reg pc_enable; 
 reg mdr_enable; 
 reg read;
@@ -15,8 +18,16 @@ reg pc_increment;
 reg r1_enable; 
 reg r2_enable; 
 reg r3_enable;
-reg r2_out; 
+reg r4_enable;
+reg r5_enable;
+reg r6_enable;
+reg r7_enable;
+reg r2_out;
 reg r3_out;
+reg r4_out;
+reg r5_out;
+reg r6_out;
+reg r7_out;
 reg clk; 
 reg clr;
 reg [4:0] op_code; 
@@ -37,6 +48,7 @@ parameter T2 = 4'b1001;
 parameter T3 = 4'b1010; 
 parameter T4 = 4'b1011; 
 parameter T5 = 4'b1100; 
+
 reg	[3:0] present_state = start;
 
 // Opcodes for operations
@@ -61,9 +73,10 @@ parameter neg_opcode = 5'b10001;
 parameter not_opcode = 5'b10010;
 
 // Instantiate the DUT
-or_datapath DUT(
+datapath DUT(
 	.pc_out(pc_out), 
 	.zlo_out(zlo_out), 
+	.zhi_out(zhi_out),
 	.mdr_out(mdr_out), 
 	.mar_enable(mar_enable), 
 	.z_enable(z_enable), 
@@ -78,8 +91,18 @@ or_datapath DUT(
 	.r1_enable(r1_enable),
 	.r2_enable(r2_enable),
 	.r3_enable(r3_enable),
+	.r4_enable(r4_enable),
+	.r5_enable(r5_enable),
+	.r6_enable(r6_enable),
+	.r7_enable(r7_enable),
+	.lo_enable(lo_enable),
+	.hi_enable(hi_enable),
 	.r2_out(r2_out),
 	.r3_out(r3_out),
+	.r4_out(r4_out),
+	.r5_out(r5_out),
+	.r6_out(r6_out),
+	.r7_out(r7_out),
 	.clr(clr), 
 	.clk(clk),
 	.zlo_data(zlo_data)
@@ -128,12 +151,12 @@ begin
 		// present_state: 0
 		// Set all signals to 0
 		start: begin	
-			pc_out <= 0; zlo_out <= 0; mdr_out <= 0;
-			r2_out <= 0; r3_out <= 0; mar_enable <= 0;
-			z_enable <= 0; pc_enable <= 0; mdr_enable <= 0;
+			pc_out <= 0; zlo_out <= 0; zhi_out <= 0; lo_enable <= 0; hi_enable <= 0; mdr_out <= 0;
+			r2_out <= 0; r3_out <= 0; r4_out <= 0; r5_out <= 0; r6_out <= 0; r7_out <= 0;
+			pc_enable <= 0; mdr_enable <= 0; mar_enable <= 0; 
 			ir_enable <= 0; y_enable <= 0; pc_increment <= 0;   
 			read <= 0; op_code <= 0; z_enable <= 0;
-			r1_enable <= 0; r2_enable <= 0; r3_enable <= 0; 
+			r1_enable <= 0; r2_enable <= 0; r3_enable <= 0; r4_enable <= 0; r5_enable <= 0; r6_enable <= 0; r7_enable <= 0;
 			m_data_in <= 32'h00000000;
 		end
 		
@@ -155,7 +178,7 @@ begin
 		// present_state: 3
 		// Load 0x00000000 into MDR
 		reg_load2a: begin
-			m_data_in <= 32'h00000000;
+			m_data_in <= 32'h01010101;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
