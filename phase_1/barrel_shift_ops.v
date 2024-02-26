@@ -1,5 +1,5 @@
 // Logical Shift right
-module srl(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
+module shl(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
 
     logic [31:0] stage0, stage1, stage2, stage3, stage4;
 
@@ -46,7 +46,7 @@ endmodule
 
 
 // Arithmetic shift right
-module sra(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
+module shr(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
 
     logic [31:0] stage0, stage1, stage2, stage3, stage4;
 
@@ -100,7 +100,7 @@ module sra(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
 endmodule
 
 // Logical Shift left 
-module sll(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
+module shl(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
 
     logic [31:0] stage0, stage1, stage2, stage3, stage4;
 
