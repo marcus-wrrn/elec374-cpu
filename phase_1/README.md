@@ -7,7 +7,14 @@
 ![AND testbench waveforms](/phase_1/waveforms/and_tb.png)
 
 ```verilog
+R1 = 0xFFFFFFFF
+R2 = 0xF0F0F0F0
+R3 = 0xFFFFFFFF
+
 and R1, R2, R3
+
+Result:
+R1 = 0xF0F0F0F0
 ```
 
 ### OR
