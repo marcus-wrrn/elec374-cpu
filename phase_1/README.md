@@ -194,3 +194,5 @@ not R6, R7
 Result:
 R6 = 
 ```
+
+## Testbench Code
