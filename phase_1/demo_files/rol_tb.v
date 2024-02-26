@@ -161,9 +161,9 @@ begin
 		end
 		
 		// present_state: 1
-		// Load 0xF0000000 into MDR
+		// Load 0xFFFFFFF0 into MDR
 		reg_load1a: begin
-			m_data_in <= 32'h00000001;
+			m_data_in <= 32'hFFFFFFF0;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
@@ -176,9 +176,9 @@ begin
 		end
 
 		// present_state: 3
-		// Load 0x1 into MDR
+		// Load 0x4 into MDR
 		reg_load2a: begin
-			m_data_in <= 32'h00000001;
+			m_data_in <= 32'h4;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
