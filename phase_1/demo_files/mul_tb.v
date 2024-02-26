@@ -162,7 +162,7 @@ begin
 		end
 		
 		// present_state: 1
-		// Load 0xF0F0F0F0 into MDR
+		// Load 0x11111111 into MDR
 		reg_load1a: begin
 			m_data_in <= 32'h11111111;
 			read <= 1; mdr_enable <= 1;
@@ -170,14 +170,14 @@ begin
 		end
 
 		// present_state: 2
-		// Load MDR into R2
+		// Load MDR into R4
 		reg_load1b: begin
 			mdr_out <= 1; r4_enable <= 1;
 			#20 mdr_out <= 0; r4_enable <= 0;
 		end
 
 		// present_state: 3
-		// Load 0xFFFFFFFF into MDR
+		// Load 0x11111111 into MDR
 		reg_load2a: begin
 			m_data_in <= 32'h11111111;
 			read <= 1; mdr_enable <= 1;
@@ -185,7 +185,7 @@ begin
 		end
 		
 		// present_state: 4
-		// Load MDR into R3
+		// Load MDR into R5
 		reg_load2b: begin	
 			mdr_out <= 1; r5_enable <= 1;
 			#20 mdr_out <= 0; r5_enable <= 0;
@@ -230,14 +230,14 @@ begin
 		end
 
 		// present_state: a
-		// Load R2 into Y
+		// Load R4 into Y
 		T3: begin	
 			r4_out <= 1; y_enable <= 1;
 			#20 r4_out<= 0; y_enable <= 0;  
 		end
 
 		// present_state: b
-		// Put R3 into alu.b and put or opcode into ALU. Store ALU restults in ZLO
+		// Put R5 into alu.b and put mul opcode into ALU. Store ALU results in Z registers
 		T4: begin
 			r5_out<= 1; op_code <= mul_opcode; z_enable <= 1; 
 			#20 r5_out<= 0; z_enable <= 0;
