@@ -1,10 +1,10 @@
 //rotate right
-module ror(input wire[31:0] a, input wire[4:0] b, output reg[31:0] result);
+module ror(input wire[31:0] a, input wire[31:0] b, output wire [31:0] result);
 
 
-    logic [31:0] stage0, stage1, stage2, stage3, stage4;
+    reg [31:0] stage0, stage1, stage2, stage3, stage4;
 
-    always_comb begin
+    always @(*) begin
         // Stage 0, shift by 0 or 1 bit
         if (b[0]) begin
             stage0 = {a[0], a[31:1]};
@@ -46,12 +46,12 @@ module ror(input wire[31:0] a, input wire[4:0] b, output reg[31:0] result);
 endmodule
 
 // Rotate Left
-module rol(input wire[31:0] a, input wire[4:0] b, output reg[31:0] result);
+module rol(input wire[31:0] a, input wire[31:0] b, output wire [31:0] result);
 
 
-    logic [31:0] stage0, stage1, stage2, stage3, stage4;
+    reg [31:0] stage0, stage1, stage2, stage3, stage4;
 
-    always_comb begin
+    always @(*) begin
         // Stage 0, shift by 0 or 1 bit
         if (b[0]) begin
             stage0 = {a[30:0], a[31]};
