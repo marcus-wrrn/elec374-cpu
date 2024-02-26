@@ -12,15 +12,15 @@ module logical_or(input wire [31:0] a, b, output wire [31:0] result);
 endmodule
 
 
-module logical_neg(input wire [31:0] a, output wire [31:0] result);
+module logical_neg(input wire [31:0] b, output wire [31:0] result);
 
-	assign result = ~a + 1;
+	assign result = ~b + 1;
 
 endmodule
 
 
-module logical_not(input wire [31:0] a, output wire [31:0] result);
+module logical_not(input wire [31:0] b, output wire [31:0] result);
 
-	assign result = ~a;
+	assign result = ~b;
 
 endmodule

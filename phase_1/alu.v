@@ -33,8 +33,8 @@ shra shra_op(.a(a), .b(b), .result(shra_result));
 shl shl_op(.a(a), .b(b), .result(shl_result));
 ror ror_op(.a(a), .b(b), .result(ror_result));
 rol rol_op(.a(a), .b(b), .result(rol_result));
-logical_neg neg_op(.a(a), .result(neg_result));
-logical_not not_op(.a(a), .result(not_result));
+logical_neg neg_op(.b(b), .result(neg_result));
+logical_not not_op(.b(b), .result(not_result));
 
 
 

@@ -179,7 +179,7 @@ begin
 		// present_state: 3
 		// Load 0x11111111 into MDR
 		reg_load2a: begin
-			m_data_in <= 32'h11111111;
+			m_data_in <= 32'hEEEEEEEF;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end

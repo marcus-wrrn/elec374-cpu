@@ -169,16 +169,16 @@ begin
 		end
 
 		// present_state: 2
-		// Load MDR into R2
+		// Load MDR into R6
 		reg_load1b: begin
-			mdr_out <= 1; r2_enable <= 1;
-			#20 mdr_out <= 0; r2_enable <= 0;
+			mdr_out <= 1; r6_enable <= 1;
+			#20 mdr_out <= 0; r6_enable <= 0;
 		end
 
 		// present_state: 3
 		// Load 0x1 into MDR
 		reg_load2a: begin
-			m_data_in <= 32'h00000001;
+			m_data_in <= 32'b0101;
 			read <= 1; mdr_enable <= 1;
 			#20 read <= 0; mdr_enable <= 0;
 		end
@@ -186,8 +186,8 @@ begin
 		// present_state: 4
 		// Load MDR into R3
 		reg_load2b: begin	
-			mdr_out <= 1; r3_enable <= 1;
-			#20 mdr_out <= 0; r3_enable <= 0;
+			mdr_out <= 1; r7_enable <= 1;
+			#20 mdr_out <= 0; r7_enable <= 0;
 		end
 		
 		// present_state: 5
@@ -231,22 +231,15 @@ begin
 		// present_state: a
 		// Load R2 into Y
 		T3: begin	
-			r2_out<= 1; y_enable <= 1;
-			#20 r2_out<= 0; y_enable <= 0;  
+			r7_out<= 1; z_enable <= 1; op_code <= neg_opcode;
+			#20 r7_out<= 0; z_enable <= 0;
 		end
 
 		// present_state: b
 		// Put R3 into alu.b and put or opcode into ALU. Store ALU restults in ZLO
 		T4: begin
-			r3_out<= 1; op_code <= neg_opcode; z_enable <= 1; 
-			#20 r3_out<= 0; z_enable <= 0;
-		end
-
-		// present_state: c
-		// Store ZLO into R1
-		T5: begin	
-			zlo_out<= 1; r1_enable <= 1; 
-			#20 zlo_out<= 0; r1_enable <= 0;
+			zlo_out <= 1; r6_enable <= 1; 
+			#20 zlo_out <= 0; r6_enable <= 0;
 		end
 	endcase
 end
