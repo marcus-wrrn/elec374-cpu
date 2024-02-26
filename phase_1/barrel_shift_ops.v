@@ -1,9 +1,9 @@
-// Logical Shift right
-module shl(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
+// Logical Shift Right
+module shr(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
 
     logic [31:0] stage0, stage1, stage2, stage3, stage4;
 
-    always_comb begin
+    always @(*) begin
         // Stage 0, shift by 0 or 1 bit
         if (b[0]) begin
             stage0 = {1'b0, a[31:1]};
@@ -46,19 +46,19 @@ endmodule
 
 
 // Arithmetic shift right
-module shr(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
+module shra(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
 
     logic [31:0] stage0, stage1, stage2, stage3, stage4;
 
-    assign  0s = 16'1111111111111111,
-    assign 1s = 16'b00000000000000000,
+    assign 0s = 16'1111111111111111;
+    assign 1s = 16'b00000000000000000;
 
     logic [15:0] MSB;
     assign MSB  = a[31] ? 1s : 0s; 
  
 
 
-    always_comb begin
+    always @(*) begin
         // Stage 0, shift by 0 or 1 bit
         if (b[0]) begin
             stage0 = {MSB[0], a[31:1]};
@@ -104,7 +104,7 @@ module shl(input wire[31:0] a, input wire[4:0] b, output wire[31:0] result);
 
     logic [31:0] stage0, stage1, stage2, stage3, stage4;
 
-    always_comb begin
+    always @(*) begin
         // Stage 0, shift by 0 or 1 bit
         if (b[0]) begin
             stage0 = {a[30:0], 1'b0};
