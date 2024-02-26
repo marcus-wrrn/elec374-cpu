@@ -25,7 +25,7 @@ wire [31:0] not_result;
 logical_and and_op(.a(a), .b(b), .result(and_result));
 logical_or or_op(.a(a), .b(b), .result(or_result));
 add add_op(.a(a), .b(b), .cin(0), .sum(add_result), .cout(add_carry));
-// sub sub_op(.a(a), .b(b), .result(sub_result));
+sub sub_op(.a(a), .b(b), .cin(0), .sum(sub_result), .cout(cout));
 mul mul_op(.m(a), .q(b), .out(mul_result));
 div div_op(.a(a), .b(b), .result(div_result));
 shr shr_op(.a(a), .b(b), .result(shr_result));
