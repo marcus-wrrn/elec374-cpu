@@ -35,13 +35,27 @@ R1 = 0xA1A1A1A1
 ### ADD
 
 ```verilog
+R1 = 
+R2 = 
+R3 = 
+
 add R1, R2, R3
+
+Result:
+R1 = 
 ```
 
 ### SUB
 
 ```verilog
+R1 = 
+R2 = 
+R3 = 
+
 sub R1, R2, R3
+
+Result:
+R1 = 
 ```
 
 ### MUL
@@ -60,49 +74,101 @@ LO =
 ### DIV
 
 ```verilog
+R4 = 
+R5 = 
+
 div R4, R5
 
-
+Result:
+HI = 
+LO = 
 ```
 
 ### SHR
 
 ```verilog
+R1 = 
+R2 = 
+R3 = 
+
 shr R1, R2, R3
+
+Result:
+R1 = 
 ```
 
 ### SHRA
 
 ```verilog
+R1 = 
+R2 = 
+R3 = 
+
 shra R1, R2, R3
+
+Result:
+R1 = 
 ```
 
 ### SHL
 
 ```verilog
+R1 = 
+R2 = 
+R3 = 
+
 shl R1, R2, R3
+
+Result:
+R1 = 
 ```
 
 ### ROR
 
 ```verilog
+R1 = 
+R2 = 
+R3 = 
+
 ror R1, R2, R3
+
+Result:
+R1 = 
 ```
 
 ### ROL
 
 ```verilog
+R1 = 
+R2 = 
+R3 = 
+
 rol R1, R2, R3
+
+Result:
+R1 = 
 ```
 
 ### NEG
 
 ```verilog
+R6 = 
+R7 = 
+
 neg R6, R7
+
+Result:
+R6 = 
 ```
 
 ### NOT
 
 ```verilog
+R6 = 
+R7 = 
+
 not R6, R7
+
+Result:
+R6 = 
 ```
