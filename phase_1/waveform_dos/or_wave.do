@@ -18,10 +18,12 @@ add wave -noupdate -radix hexadecimal /or_tb/r3_enable
 add wave -noupdate -radix hexadecimal /or_tb/r2_out
 add wave -noupdate -radix hexadecimal /or_tb/r3_out
 add wave -noupdate -radix hexadecimal /or_tb/clk
+add wave -noupdate -radix hexadecimal /or_tb/clr
 add wave -noupdate -radix hexadecimal /or_tb/op_code
 add wave -noupdate -radix hexadecimal /or_tb/m_data_in
 add wave -noupdate -radix hexadecimal /or_tb/zlo_data
 add wave -noupdate -radix hexadecimal /or_tb/present_state
+add wave -noupdate -radix hexadecimal /or_tb/toggle
 add wave -noupdate -radix hexadecimal /or_tb/DUT/r1/q
 add wave -noupdate -radix hexadecimal /or_tb/DUT/r2/q
 add wave -noupdate -radix hexadecimal /or_tb/DUT/r3/q
@@ -31,9 +33,9 @@ add wave -noupdate -radix hexadecimal /or_tb/DUT/mar/q
 add wave -noupdate -radix hexadecimal /or_tb/DUT/mdr/q
 add wave -noupdate -radix hexadecimal /or_tb/DUT/pc/pc_out
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {585146 ps} 0}
+WaveRestoreCursors {{Cursor 1} {582130 ps} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 150
+configure wave -namecolwidth 166
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -45,6 +47,6 @@ configure wave -gridoffset 0
 configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
-configure wave -timelineunits ns
+configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {1262040 ps}
+WaveRestoreZoom {0 ps} {722196 ps}
