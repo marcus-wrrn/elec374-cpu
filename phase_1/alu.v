@@ -9,7 +9,7 @@ module alu (
 // Intermediate wires for various operations
 wire [31:0] and_result;
 wire [31:0] or_result;
-wire [31:0] add_result;
+wire [31:0] add_result;	wire [0:0] add_carry;
 wire [31:0] sub_result;
 wire [63:0] mul_result;
 wire [63:0] div_result;
@@ -24,7 +24,7 @@ wire [31:0] not_result;
 // Instantiation of modules for operations
 logical_and and_op(.a(a), .b(b), .result(and_result));
 logical_or or_op(.a(a), .b(b), .result(or_result));
-// add add_op(.a(a), .b(b), .result(add_result));
+add add_op(.a(a), .b(b), .cin(0), .sum(add_result), .cout(add_carry));
 // sub sub_op(.a(a), .b(b), .result(sub_result));
 mul mul_op(.m(a), .q(b), .out(mul_result));
 div div_op(.a(a), .b(b), .result(div_result));
