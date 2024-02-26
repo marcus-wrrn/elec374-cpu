@@ -176,7 +176,7 @@ begin
 		end
 
 		// present_state: 3
-		// Load 0x00000000 into MDR
+		// Load 0x01010101 into MDR
 		reg_load2a: begin
 			m_data_in <= 32'h01010101;
 			read <= 1; mdr_enable <= 1;
@@ -236,7 +236,7 @@ begin
 		end
 
 		// present_state: b
-		// Put R3 into alu.b and put or opcode into ALU. Store ALU restults in ZLO
+		// Put R3 into alu.b and put opcode into ALU. Store ALU restults in ZLO
 		T4: begin
 			r3_out<= 1; op_code <= or_opcode; z_enable <= 1; 
 			#20 r3_out<= 0; z_enable <= 0;
