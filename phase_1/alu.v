@@ -36,11 +36,6 @@ rol rol_op(.a(a), .b(b), .result(rol_result));
 logical_neg neg_op(.b(b), .result(neg_result));
 logical_not not_op(.b(b), .result(not_result));
 
-
-
-
-
-
 // Opcodes for operations
 localparam ld_opcode = 5'b00000;
 localparam ldi_opcode = 5'b00001;
@@ -61,7 +56,6 @@ localparam mul_opcode = 5'b01111;
 localparam div_opcode = 5'b10000;
 localparam neg_opcode = 5'b10001;
 localparam not_opcode = 5'b10010;
-
 
 // Select the internal result based on the opcode
 always @(*) begin

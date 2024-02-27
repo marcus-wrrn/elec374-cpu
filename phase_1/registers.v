@@ -1,17 +1,3 @@
-/**
- * @module reg_32_bit
- * @brief 32-bit register module
- *
- * This module represents a 32-bit register with clock, clear, enable, input, and output signals.
- * It stores a 32-bit input value when the enable signal is active and outputs the stored value when requested.
- * The register can be cleared to 0 when the clear signal is active.
- *
- * @param clk Clock signal
- * @param clr Clear signal
- * @param en Write/enable signal
- * @param d 32-bit input to register (BusMuxOut)
- * @param q 32-bit output from register (BusMuxIn_R#)
- */
 module reg_32_bit (
 	input wire clk,
 	input wire clr,
@@ -33,20 +19,6 @@ module reg_32_bit (
 
 endmodule
 
-/**
- * @module pc_reg
- * @brief Program Counter (PC) register module
- *
- * This module represents a program counter register with clock, enable, and increment signals.
- * It stores a 32-bit input value when the enable signal is active and increments the stored value when the increment signal is active.
- * The register can be used to keep track of the program counter in a CPU.
- *
- * @param clk Clock signal
- * @param en Write/enable signal
- * @param pc_increment Increment the program counter
- * @param pc_in 32-bit input to register (BusMuxOut)
- * @param pc_out 32-bit output from register (BusMuxIn_PC)
- */
 module pc_reg (
 	input wire clk,				// clock signal
 	input wire en,				// write/enable signal

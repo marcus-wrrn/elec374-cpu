@@ -26,16 +26,7 @@ module mul(input signed [31:0] m, q, output [63:0] out);
 
                 
             endcase
-				// If manual shift does not work uncomment this line and use this instead
-                shifted_hold[i] = hold[i] << (2*i);
-					 
-            // Perform manual shift
-            // shifted_hold[i] = 0;
-            // for(j = 0; j < (32-2*i); j = j + 1) begin
-            //     if (j + 2*i < 32) begin
-            //         shifted_hold[i][j+2*i] = hold[i][j];
-            //     end
-            // end
+            shifted_hold[i] = hold[i] << (2*i);
         end
         sum = shifted_hold[0];
         for(i = 1; i < 16; i = i + 1) begin
