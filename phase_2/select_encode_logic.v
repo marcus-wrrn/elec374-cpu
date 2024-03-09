@@ -1,4 +1,4 @@
-module select_encoder (
+module select_encode_logic (
     input [31:0] ir,
     input gra, grb, grc, r_in, r_out, ba_out,
     output [15:0] r0_15in, r0_15out,
@@ -13,14 +13,14 @@ module select_encoder (
     assign B = {4{grb}} & ir[22:19];
     assign C = {4{grc}} & ir[18:15];
 
-    assign E = |(A | B | C);
+    assign E = (A | B | C);
 
     decoder_4_16 dec_4_16(.in(E), .out(decoded_logic));
 
     assign r0_15in = {16{r_in}} & decoded_logic;
     assign r0_15out = {16{r_out | ba_out}} & decoded_logic;
     assign op_code = ir[31:27];
-    assign c_sign_extended = {{13{ir[18]}} ir[18:0]};
+    assign c_sign_extended = {{13{ir[18]}}, ir[18:0]};
 
 endmodule
 
