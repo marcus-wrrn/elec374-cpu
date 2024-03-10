@@ -149,6 +149,10 @@ reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
 reg_32_bit c_sign_extended(clk, clr, c_sign_extended_enable, bus, c_sign_extended_data);
 pc_reg pc(clk, pc_enable, pc_increment, bus, pc_data);
 
+// Instantiate I/O ports
+inport inport(clk, clr, inport_enable, input_unit_data, inport_data);
+outport outport(clk, clr, outport_enable, bus, outport_data);
+
 
 // Instantiate MDR Mux
 mdr_mux_2_to_1 mdr_mux(
