@@ -121,7 +121,7 @@ wire [31:0] inport_data;
 wire [31:0] c_sign_extended_data;
 
 // Instantiate register modules
-r0_reg r0(clk, clr, r0_enable, ba_out, bus, r0_data);
+r0_reg r0(clk, clr, r0_enable, ba_out, bus, r0_data);   // TODO: TEST THIS
 reg_32_bit r1(clk, clr, r1_enable, bus, r1_data);
 reg_32_bit r2(clk, clr, r2_enable, bus, r2_data);
 reg_32_bit r3(clk, clr, r3_enable, bus, r3_data);
@@ -149,6 +149,18 @@ reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
 reg_32_bit c_sign_extended(clk, clr, c_sign_extended_enable, bus, c_sign_extended_data);
 pc_reg pc(clk, pc_enable, pc_increment, bus, pc_data);
 
+// TODO: Instantiate RAM, SEE IF THESE ARE THE RIGHT CONNECTIONS
+ram_512x32 ram(
+    .clk(clk),
+    .read_en(ram_read),
+    .write_en(ram_write),
+    .address(pc_data),
+    .data_in(mdr_data),
+    .data_out(m_data_in)
+);
+
+
+// TODO: TEST THIS
 // Instantiate I/O ports
 inport inport(clk, clr, inport_enable, input_unit_data, inport_data);
 outport outport(clk, clr, outport_enable, bus, outport_data);
@@ -161,6 +173,10 @@ mdr_mux_2_to_1 mdr_mux(
     .from_bus(bus),
     .from_mem_chip(m_data_in)
 );
+
+// TODO: Instantiate CON FF Logic
+
+// TODO: Instantiate select and encode logic
 
 // Instantiate Select Signal Encoder and select signal 
 wire [31:0] select;
