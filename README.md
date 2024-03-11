@@ -15,70 +15,10 @@ The objective of this phase is to build some of the datapath, registers, and ALU
 
 - [Phase 1 Rubric](/documents/phase_1/phase_1_rubric.pdf)
 
-### To implement
+## Phase 2
 
-- [x] registers.v
-  - [x] reg_32_bit
-  - [x] pc_reg
-- [ ] datapath.v
-  - [ ] bus
-  - [ ] registers
-    - [ ] mdr
-    - [ ] mar
-    - [ ] ir
-    - [ ] hi/lo
-    - [ ] pc
-    - [ ] y
-    - [ ] z
-  - [x] bus_mux_32_to_1.v
-  - [x] encoder_32_to_5.v
-- [ ] mul.v
-- [ ] div.v
-- [ ] add.v
-- [ ] sub.v
-- [x] logical_ops.v
-  - [x] logical_and
-  - [x] logical_or
-  - [x] logical_neg
-  - [x] logical_not
-- [x] shift_ops.v
-  - [x] shr
-  - [x] shra
-  - [x] shl
-- [x] rotate_ops.v
-  - [x] ror
-  - [x] rol
+The objective of this phase is to build "Select and Encode" logic, "Memory Subsystem", "CON FF" logic, and "Input/Output" ports, as well as load/store instructions, branch and jump instructions, and immediate instructions.
 
-### Test
+- [Phase 2 Instructions](/documents/phase_2/phase_2.pdf)
 
-- [ ] registers.v
-  - [ ] reg_32_bit
-  - [ ] pc_reg
-- [ ] datapath.v
-  - [ ] bus
-  - [ ] registers
-    - [ ] mdr
-    - [ ] mar
-    - [ ] ir
-    - [ ] hi/lo
-    - [ ] pc
-    - [ ] y
-    - [ ] z
-  - [ ] bus_mux_32_to_1.v
-  - [ ] encoder_32_to_5.v
-- [ ] mul.v
-- [ ] div.v
-- [ ] add.v
-- [ ] sub.v
-- [ ] logical_ops.v
-  - [ ] logical_and
-  - [ ] logical_or
-  - [ ] logical_neg
-  - [ ] logical_not
-- [ ] shift_ops.v
-  - [ ] shr
-  - [ ] shra
-  - [ ] shl
-- [ ] rotate_ops.v
-  - [ ] ror
-  - [ ] rol
+- [Phase 2 Rubric](/documents/phase_2/phase_2_rubric.pdf)
