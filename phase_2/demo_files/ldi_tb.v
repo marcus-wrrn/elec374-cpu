@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module ld_tb; 	
+module ldi_tb; 	
 reg pc_out; 
 reg zlo_out; 
 reg zhi_out;
@@ -182,7 +182,6 @@ begin
 		// present_state: 2
 		T1: begin
 			// case 1: m_data_in <= 32'b00000_0010_0000_0000000000010010101;
-			// case 2: m_data_in <= 32'b00000_0000_0010_0000000000000111000;
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
 			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 		end
@@ -207,20 +206,8 @@ begin
 
 		// present_state: 6
 		T5: begin
-			zlo_out <= 1; mar_enable <= 1;
-			#20 zlo_out <= 0; mar_enable <= 0;  
-		end
-
-		// present_state: 7
-		T6: begin
-			read <= 1; mdr_enable <= 1;
-			#20 read <= 0; mdr_enable <= 0;
-		end
-
-		// present_state: 8
-		T7: begin
-			mdr_out <= 1; gra <= 1; r_in <= 1;
-			#20 mdr_out <= 0; gra <= 0; r_in <= 0;
+			zlo_out <= 1; gra <= 1; r_in <= 1;
+			#20 zlo_out <= 0; gra <= 0;  r_in <= 0;
 		end
 	endcase
 end

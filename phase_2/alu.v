@@ -61,7 +61,12 @@ localparam not_opcode = 5'b10010;
 always @(*) begin
 	case (op_code) 
 		// FIXME: This is temporary for phase 1. This is to pass b to c when no op is selected
-		ld_opcode, ldi_opcode, st_opcode: begin
+		ld_opcode: begin
+			c[31:0] = add_result[31:0];
+			c[63:32] = 32'b0;
+		end
+
+		ldi_opcode: begin
 			c[31:0] = add_result[31:0];
 			c[63:32] = 32'b0;
 		end
