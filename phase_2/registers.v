@@ -19,23 +19,40 @@ module reg_32_bit (
 
 endmodule
 
+module c_sign_extended_reg (
+	input wire clk,
+	input wire clr,
+	input wire [31:0] d,
+	output reg [31:0] q
+);
+
+	// Initialize output to 0
+	initial q = 0;
+
+	// Register behavior
+	always @ (posedge clk) begin
+		q <= d;
+	end
+
+endmodule
+
 module pc_reg (
 	input wire clk,				// clock signal
 	input wire en,				// write/enable signal
 	input wire pc_increment,	// increment the pc
-	input wire [31:0] pc_in,	// 32-bit input to register (BusMuxOut)
-	output reg [31:0] pc_out	// 32-bit output from register (BusMuxIn_PC)
+	input wire [31:0] d,	// 32-bit input to register (BusMuxOut)
+	output reg [31:0] q	// 32-bit output from register (BusMuxIn_PC)
 );
 
 	// Initialize output to 0
-	initial pc_out = 0;
+	initial q = 0;
 
 	// Register behavior
 	always @ (posedge clk) begin
 		if (pc_increment)
-			pc_out <= pc_out + 1;
+			q <= q + 1;
 		else if (en)
-			pc_out = pc_in;
+			q = d;
 	end
 
 endmodule

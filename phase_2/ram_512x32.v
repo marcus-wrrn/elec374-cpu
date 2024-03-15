@@ -2,16 +2,20 @@ module ram_512x32 (
     input wire clk,          // Clock
     input wire [8:0] addr,   // Address bus, 9 bits for 512 locations
     input wire [31:0] data_in,   // 32-bit data input
-    input wire we,           // Write enable
+    input wire write_enable,           // Write enable
     output reg [31:0] data_out  // 32-bit data output
 );
 
     // RAM storage
     reg [31:0] memory [0:511]; // 512 x 32-bit memory
 
+    initial begin
+        $readmemh("ram_data.mif", memory);
+    end
+
     // Write operation
     always @(posedge clk) begin
-        if (we) begin
+        if (write_enable) begin
             memory[addr] <= data_in;  // Write data into memory at addr
         end
     end
