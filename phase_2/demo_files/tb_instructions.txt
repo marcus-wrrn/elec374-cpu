@@ -1,5 +1,13 @@
-ld case 1: 01000095
-ldi case 1: 09000095
+ld case 1 & 2: (loads mem addr 0x95 into R2 (0x12), then loads mem addr (0x12+0x38=4A) into R0)
+ld R2, 0x95         // 00000_0010_0000_0000000000010010101
+ld R0, 0x38(R2)     // 00000_0000_0010_0000000000000111000
+01000095
+00100038
+
+ldi case 1: 
+R0, 0x38(R2)
+09000095
+
 
 st case 1: (stores 0x43 to address 135)
 ldi R1, 0x43        // 00001_0001_0000_0000000000001000011
