@@ -77,17 +77,12 @@ datapath DUT(
 
 // FSM signals
 parameter start = 5'b00000; 
-parameter T0_ldi = 5'b00001;
-parameter T1_ldi = 5'b00010;
-parameter T2_ldi = 5'b00011;
-parameter T3_ldi = 5'b00100;
-parameter T4_ldi = 5'b00101;
-parameter T5_ldi = 5'b00110;
-parameter T0_in = 5'b00111; 
-parameter T1_in = 5'b01000;
-parameter T2_in = 5'b01001;
-parameter T3_in = 5'b01010;
-parameter T4_in = 5'b01011;
+parameter inport_ld = 5'b00001;
+parameter T0_in = 5'b00010;
+parameter T1_in = 5'b00011;
+parameter T2_in = 5'b00100;
+parameter T3_in = 5'b00101;
+parameter T4_in = 5'b00110;
 
 reg	[4:0] present_state = start;
 
@@ -112,17 +107,12 @@ begin
     if (toggle == 1)  // Check if toggle is set to change the state
     begin
         case (present_state)
-            start       : present_state = T0_ldi;
-            T0_ldi  	: present_state = T1_ldi;
-            T1_ldi  	: present_state = T2_ldi;
-            T2_ldi  	: present_state = T3_ldi;
-            T3_ldi  	: present_state = T4_ldi;
-            T4_ldi  	: present_state = T5_ldi;
-            T5_ldi  	: present_state = T0_in;
-            T0_in     : present_state = T1_in;
-			T1_in     : present_state = T2_in;
-			T2_in     : present_state = T3_in;
-            T3_in     : present_state = T4_in;
+            start       : present_state = inport_ld;
+            inport_ld  	: present_state = T0_in;
+            T0_in	  	: present_state = T1_in;
+            T1_in	  	: present_state = T2_in;
+			T2_in	  	: present_state = T3_in;
+			T3_in	  	: present_state = T4_in;
         endcase
     end
 end
@@ -142,42 +132,11 @@ begin
             outport_enable <= 0; inport_enable <= 0; inport_out <= 0;
 			inport_in <= 32'h0000beef;
 		end
-		
+
 		// present_state: 1
-		T0_ldi: begin
-			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
-			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
-			#20 pc_out <= 0; z_enable <= 0;
-		end
-
-		// present_state: 2
-		T1_ldi: begin
-			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
-			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
-		end
-
-		// present_state: 3
-		T2_ldi: begin
-			mdr_out <= 1; ir_enable <= 1; 
-			#20 mdr_out<= 0; ir_enable <= 0;
-		end
-
-		// present_state: 4
-		T3_ldi: begin	
-			grb <= 1; ba_out <= 1; y_enable <= 1; 
-			#20 grb <= 0; ba_out <= 0; y_enable <= 0;
-		end
-
-		// present_state: 5
-		T4_ldi: begin	
-			c_sign_extended_out <= 1;  z_enable <= 1;
-			#20 c_sign_extended_out <= 0; z_enable <= 0;
-		end
-
-		// present_state: 6
-		T5_ldi: begin
-			zlo_out <= 1; inport_enable <= 1;
-			#20 zlo_out <= 0; inport_enable <= 0;
+		inport_ld: begin
+			inport_enable <= 1; inport_out <= 1;
+			#20 inport_enable <= 0; inport_out <= 0;
 		end
 
 		// present_state: 7
