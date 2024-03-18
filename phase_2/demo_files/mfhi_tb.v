@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module jal_tb; 	
+module mfhi_tb; 	
 reg pc_out; 
 reg zlo_out; 
 reg zhi_out;
@@ -218,37 +218,37 @@ begin
 			#20 zlo_out <= 0; hi_enable <= 0;
 		end
 
-		// present_state: 7
-		T0_jal: begin
-			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
-			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
-			#20 pc_out <= 0; z_enable <= 0;
-		end
+		// // present_state: 7
+		// T0_jal: begin
+		// 	pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
+		// 	#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
+		// 	#20 pc_out <= 0; z_enable <= 0;
+		// end
 
-		// present_state: 8
-		T1_jal: begin
-			// jr R6 : 10100_0110_0000_0000000000000000000
-			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
-			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
-		end
+		// // present_state: 8
+		// T1_jal: begin
+		// 	// jr R6 : 10100_0110_0000_0000000000000000000
+		// 	read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
+		// 	#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
+		// end
 
-		// present_state: 9
-		T2_jal: begin
-			mdr_out <= 1; ir_enable <= 1; 
-			#20 mdr_out<= 0; ir_enable <= 0;
-		end
+		// // present_state: 9
+		// T2_jal: begin
+		// 	mdr_out <= 1; ir_enable <= 1; 
+		// 	#20 mdr_out<= 0; ir_enable <= 0;
+		// end
 
-		// present_state: a
-		T3_jal: begin	
-			pc_out <= 1; pc_increment <= 1;
-			#20 pc_increment <= 0; r15_enable <= 1;
-            #20 pc_out <= 0; r15_enable <= 0;
-		end
+		// // present_state: a
+		// T3_jal: begin	
+		// 	pc_out <= 1; pc_increment <= 1;
+		// 	#20 pc_increment <= 0; r15_enable <= 1;
+        //     #20 pc_out <= 0; r15_enable <= 0;
+		// end
 
-        // present_state: b
-        T4_jal: begin
-            pc_enable <= 1; gra <= 1; r_out <= 1;
-        end
+        // // present_state: b
+        // T4_jal: begin
+        //     pc_enable <= 1; gra <= 1; r_out <= 1;
+        // end
 	endcase
 end
 endmodule
