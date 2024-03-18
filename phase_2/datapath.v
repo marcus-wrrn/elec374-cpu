@@ -4,6 +4,8 @@ module datapath (
     input zhi_out,
     input hi_out,
     input lo_out,
+    input outport_enable,
+    input inport_enable,
     input mdr_out, 
     input mar_enable, 
     input z_enable, 
@@ -181,10 +183,10 @@ ram_512x32 ram_memory(
 );
 
 
-// // TODO: TEST THIS
-// // Instantiate I/O ports
-// inport inport(clk, clr, inport_enable, input_unit_data, inport_data);
-// outport outport(clk, clr, outport_enable, bus, outport_data);
+// TODO: TEST THIS
+// Instantiate I/O ports
+inport inport(clk, clr, inport_enable, m_data_in, inport_data);
+outport outport(clk, clr, outport_enable, bus, outport_data);
 
 
 // Instantiate MDR Mux
