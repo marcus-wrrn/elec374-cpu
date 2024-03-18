@@ -2,6 +2,11 @@ module datapath (
     input pc_out, 
     input zlo_out,
     input zhi_out,
+    input hi_out,
+    input lo_out,
+    input outport_enable,
+    input inport_enable,
+    input inport_out,
     input mdr_out, 
     input mar_enable, 
     input z_enable, 
@@ -18,6 +23,7 @@ module datapath (
     input r5_enable,
     input r6_enable,
     input r7_enable,
+    input r15_enable,
     input lo_enable,
     input hi_enable,
     input r2_out,
@@ -26,16 +32,34 @@ module datapath (
     input r5_out,
     input r6_out,
     input r7_out,
+    input c_sign_extended_out,
     input clr, 
     input clk,
-    input [4:0] op_code,
-    input [31:0] m_data_in,
-    output [31:0] zlo_data
+    input con_enable,
+    input ram_write,
+    input r_in,
+    input r_out,
+    input gra,
+    input grb,
+    input grc,
+    input ba_out,
+    // input [4:0] op_code,
+    // input [31:0] m_data_in,
+    output [31:0] zlo_data,
+    output con_out
 );
 
 wire [31:0] bus;
 wire [31:0] mdr_connection;
 wire [63:0] alu_out;
+
+// From phase 2
+wire [4:0] op_code;
+wire [15:0] r0_15in; // A 16-bit wide signal, where each bit represents an enable signal for a register.
+wire [15:0] r0_15out; // A 16-bit wide signal, where each bit represents an out signal for a register.
+wire [31:0] c_sign_extended_connection; // wire to connect select and encode logic to c_sign_extended
+wire [31:0] m_data_in; // wire to connect ram to mdr_mux => mdr
+// wire con_out; // output of conff
 
 // Register enable signals
 wire r0_enable;
@@ -53,7 +77,7 @@ wire r11_enable;
 wire r12_enable;
 wire r13_enable;
 wire r14_enable;
-wire r15_enable;
+// wire r15_enable;
 //wire y_enable;
 //wire hi_enable;
 //wire lo_enable;
@@ -84,14 +108,14 @@ wire r14_out = 0;
 wire r15_out = 0;
 //wire pc_out = 0;
 wire y_out = 0;
-wire hi_out = 0;
-wire lo_out = 0;
+// wire hi_out = 0;
+// wire lo_out = 0;
 // wire zhi_out = 0;
 //wire zlo_out = 0;
 //wire mar_out = 0;
 //wire mdr_out = 0;
-wire inport_out = 0;
-wire c_sign_extended_out = 0;
+// wire inport_out = 0;
+// wire c_sign_extended_out = 0;
 
 // Register output data wires (connect to the bus)
 wire [31:0] r0_data;
@@ -116,27 +140,30 @@ wire [31:0] hi_data;
 wire [31:0] lo_data;
 wire [31:0] zhi_data;
 wire [31:0] mdr_data;
+wire [31:0] mar_data;
 // wire [31:0] zlo_data;
 wire [31:0] inport_data;
 wire [31:0] c_sign_extended_data;
+wire [31:0] ir_data;
+
 
 // Instantiate register modules
-r0_reg r0(clk, clr, r0_enable, ba_out, bus, r0_data);
-reg_32_bit r1(clk, clr, r1_enable, bus, r1_data);
-reg_32_bit r2(clk, clr, r2_enable, bus, r2_data);
-reg_32_bit r3(clk, clr, r3_enable, bus, r3_data);
-reg_32_bit r4(clk, clr, r4_enable, bus, r4_data);
-reg_32_bit r5(clk, clr, r5_enable, bus, r5_data);
-reg_32_bit r6(clk, clr, r6_enable, bus, r6_data);
-reg_32_bit r7(clk, clr, r7_enable, bus, r7_data);
-reg_32_bit r8(clk, clr, r8_enable, bus, r8_data);
-reg_32_bit r9(clk, clr, r9_enable, bus, r9_data);
-reg_32_bit r10(clk, clr, r10_enable, bus, r10_data);
-reg_32_bit r11(clk, clr, r11_enable, bus, r11_data);
-reg_32_bit r12(clk, clr, r12_enable, bus, r12_data);
-reg_32_bit r13(clk, clr, r13_enable, bus, r13_data);
-reg_32_bit r14(clk, clr, r14_enable, bus, r14_data);
-reg_32_bit r15(clk, clr, r15_enable, bus, r15_data);
+r0_reg r0(clk, clr, r0_15in[0], ba_out, bus, r0_data);
+reg_32_bit r1(clk, clr, r0_15in[1], bus, r1_data);
+reg_32_bit r2(clk, clr, r0_15in[2], bus, r2_data);
+reg_32_bit r3(clk, clr, r0_15in[3], bus, r3_data);
+reg_32_bit r4(clk, clr, r0_15in[4], bus, r4_data);
+reg_32_bit r5(clk, clr, r0_15in[5], bus, r5_data);
+reg_32_bit r6(clk, clr, r0_15in[6], bus, r6_data);
+reg_32_bit r7(clk, clr, r0_15in[7], bus, r7_data);
+reg_32_bit r8(clk, clr, r0_15in[8], bus, r8_data);
+reg_32_bit r9(clk, clr, r0_15in[9], bus, r9_data);
+reg_32_bit r10(clk, clr, r0_15in[10], bus, r10_data);
+reg_32_bit r11(clk, clr, r0_15in[11], bus, r11_data);
+reg_32_bit r12(clk, clr, r0_15in[12], bus, r12_data);
+reg_32_bit r13(clk, clr, r0_15in[13], bus, r13_data);
+reg_32_bit r14(clk, clr, r0_15in[14], bus, r14_data);
+reg_32_bit r15(clk, clr, r15_enable, bus, r15_data);    // FIXME: r15_enable is temporary for phase 2
 
 reg_32_bit y(clk, clr, y_enable, bus, y_data);
 reg_32_bit hi(clk, clr, hi_enable, bus, hi_data);
@@ -146,11 +173,21 @@ reg_32_bit zhi(clk, clr, z_enable, alu_out[63:32], zhi_data);
 reg_32_bit ir(clk, clr, ir_enable, bus, ir_data);
 reg_32_bit mar(clk, clr, mar_enable, bus, mar_data);
 reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
-reg_32_bit c_sign_extended(clk, clr, c_sign_extended_enable, bus, c_sign_extended_data);
+c_sign_extended_reg c_sign_extended(clk, clr, c_sign_extended_connection, c_sign_extended_data);
 pc_reg pc(clk, pc_enable, pc_increment, bus, pc_data);
 
+// Instantiate RAM, SEE IF THESE ARE THE RIGHT CONNECTIONS
+ram_512x32 ram_memory(
+    .clk(clk),
+    .addr(mar_data),
+    .data_in(mdr_data),
+    .write_enable(ram_write),
+    .data_out(m_data_in)
+);
+
+
 // Instantiate I/O ports
-inport inport(clk, clr, inport_enable, input_unit_data, inport_data);
+inport inport(clk, clr, inport_enable, m_data_in, inport_data);
 outport outport(clk, clr, outport_enable, bus, outport_data);
 
 
@@ -160,6 +197,29 @@ mdr_mux_2_to_1 mdr_mux(
     .read(read),
     .from_bus(bus),
     .from_mem_chip(m_data_in)
+);
+
+// TODO: Instantiate CON FF Logic
+conff conff(
+    .bus(bus),
+    .c2(ir_data[22:19]),
+    .con_enable(con_enable),
+    .condition(con_out)
+);
+
+// Instantiate select and encode logic
+select_encode_logic select_encode(
+    .ir(ir_data),
+    .gra(gra),
+    .grb(grb),
+    .grc(grc),
+    .r_in(r_in),
+    .r_out(r_out),
+    .ba_out(ba_out),
+    .r0_15in(r0_15in),
+    .r0_15out(r0_15out),
+    .op_code(op_code),
+    .c_sign_extended(c_sign_extended_connection)
 );
 
 // Instantiate Select Signal Encoder and select signal 
@@ -176,22 +236,22 @@ assign select = {
     zhi_out, 
     lo_out, 
     hi_out, 
-    r15_out, 
-    r14_out,
-    r13_out,
-    r12_out,
-    r11_out,
-    r10_out,
-    r9_out,
-    r8_out,
-    r7_out,
-    r6_out,
-    r5_out,
-    r4_out,
-    r3_out,
-    r2_out,
-    r1_out,
-    r0_out
+    r0_15out[15], 
+    r0_15out[14],
+    r0_15out[13],
+    r0_15out[12],
+    r0_15out[11],
+    r0_15out[10],
+    r0_15out[9],
+    r0_15out[8],
+    r0_15out[7],
+    r0_15out[6],
+    r0_15out[5],
+    r0_15out[4],
+    r0_15out[3],
+    r0_15out[2],
+    r0_15out[1],
+    r0_15out[0]
 };
 
 encoder_32_to_5 select_encoder(
