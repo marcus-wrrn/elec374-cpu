@@ -197,7 +197,7 @@ begin
 
 		// present_state: 2
 		T1_ld1: begin
-			// ld R2, 0x95 : m_data_in <= 32'b00000_0010_0000_0000000000010010101;
+			// ld R2, 0x95 : 00000_0010_0000_0000000000010010101;
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
 			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 		end
@@ -247,7 +247,7 @@ begin
 
 		// present_state: a
 		T1_ld2: begin
-			// ld R0, 0x38(R2) : m_data_in <= 32'b00000_0000_0010_0000000000000111000;
+			// ld R0, 0x38(R2) : 00000_0000_0010_0000000000000111000;
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
 			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 		end

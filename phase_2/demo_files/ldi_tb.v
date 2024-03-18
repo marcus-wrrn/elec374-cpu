@@ -44,15 +44,19 @@ reg ba_out;
 wire [31:0] zlo_data;
 
 // FSM signals
-parameter start = 4'b0000; 
-parameter T0 = 4'b0001; 
-parameter T1 = 4'b0010; 
-parameter T2 = 4'b0011; 
-parameter T3 = 4'b0100; 
-parameter T4 = 4'b0101; 
-parameter T5 = 4'b0110; 
-parameter T6 = 4'b0111; 
-parameter T7 = 4'b1000;
+parameter start = 5'b00000; 
+parameter T0_ldi1 = 5'b00001; 
+parameter T1_ldi1 = 5'b00010; 
+parameter T2_ldi1 = 5'b00011; 
+parameter T3_ldi1 = 5'b00100; 
+parameter T4_ldi1 = 5'b00101; 
+parameter T5_ldi1 = 5'b00110; 
+parameter T0_ldi2 = 5'b00111; 
+parameter T1_ldi2 = 5'b01000;
+parameter T2_ldi2 = 5'b01001;
+parameter T3_ldi2 = 5'b01010;
+parameter T4_ldi2 = 5'b01011;
+parameter T5_ldi2 = 5'b01100;
 
 reg	[3:0] present_state = start;
 
@@ -143,14 +147,18 @@ begin
     if (toggle == 1)  // Check if toggle is set to change the state
     begin
         case (present_state)
-            start       : present_state = T0;
-            T0  		: present_state = T1;
-            T1  		: present_state = T2;
-            T2  		: present_state = T3;
-            T3  		: present_state = T4;
-            T4  		: present_state = T5;
-            T5  		: present_state = T6;
-            T6          : present_state = T7;
+            start       : present_state = T0_ldi1;
+            T0_ldi1  	: present_state = T1_ldi1;
+            T1_ldi1  	: present_state = T2_ldi1;
+            T2_ldi1  	: present_state = T3_ldi1;
+            T3_ldi1  	: present_state = T4_ldi1;
+            T4_ldi1  	: present_state = T5_ldi1;
+            T5_ldi1  	: present_state = T0_ldi2;
+            T0_ldi2     : present_state = T1_ldi2;
+			T1_ldi2     : present_state = T2_ldi2;
+			T2_ldi2     : present_state = T3_ldi2;
+			T3_ldi2     : present_state = T4_ldi2;
+			T4_ldi2     : present_state = T5_ldi2;
         endcase
     end
 end
@@ -173,39 +181,77 @@ begin
 		end
 		
 		// present_state: 1
-		T0: begin
+		T0_ldi1: begin
 			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
 			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
 			#20 pc_out <= 0; z_enable <= 0;
 		end
 
 		// present_state: 2
-		T1: begin
-			// case 1: m_data_in <= 32'b00000_0010_0000_0000000000010010101;
+		T1_ldi1: begin
+			// ldi R2, 0x95 : 00001_0010_0000_0000000000010010101
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
 			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 		end
 
 		// present_state: 3
-		T2: begin
+		T2_ldi1: begin
 			mdr_out <= 1; ir_enable <= 1; 
 			#20 mdr_out<= 0; ir_enable <= 0;
 		end
 
 		// present_state: 4
-		T3: begin	
+		T3_ldi1: begin	
 			grb <= 1; ba_out <= 1; y_enable <= 1;
 			#20 grb <= 0; ba_out <= 0; y_enable <= 0;
 		end
 
 		// present_state: 5
-		T4: begin	
+		T4_ldi1: begin	
 			c_sign_extended_out <= 1;  z_enable <= 1;
 			#20 c_sign_extended_out <= 0; z_enable <= 0;
 		end
 
 		// present_state: 6
-		T5: begin
+		T5_ldi1: begin
+			zlo_out <= 1; gra <= 1; r_in <= 1;
+			#20 zlo_out <= 0; gra <= 0;  r_in <= 0;
+		end
+
+		// present_state: 7
+		T0_ldi2: begin
+			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
+			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
+			#20 pc_out <= 0; z_enable <= 0;
+		end
+
+		// present_state: 8
+		T1_ldi2: begin
+			// ldi R0, 0x38(R2) : 00001_0000_0010_0000000000000111000
+			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
+			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
+		end
+
+		// present_state: 9
+		T2_ldi2: begin
+			mdr_out <= 1; ir_enable <= 1; 
+			#20 mdr_out<= 0; ir_enable <= 0;
+		end
+
+		// present_state: a
+		T3_ldi2: begin	
+			grb <= 1; ba_out <= 1; y_enable <= 1;
+			#20 grb <= 0; ba_out <= 0; y_enable <= 0;
+		end
+
+		// present_state: b
+		T4_ldi2: begin	
+			c_sign_extended_out <= 1;  z_enable <= 1;
+			#20 c_sign_extended_out <= 0; z_enable <= 0;
+		end
+
+		// present_state: c
+		T5_ldi2: begin
 			zlo_out <= 1; gra <= 1; r_in <= 1;
 			#20 zlo_out <= 0; gra <= 0;  r_in <= 0;
 		end
