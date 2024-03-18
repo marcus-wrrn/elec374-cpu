@@ -45,7 +45,8 @@ module datapath (
     input ba_out,
     // input [4:0] op_code,
     // input [31:0] m_data_in,
-    output [31:0] zlo_data
+    output [31:0] zlo_data,
+    output con_out
 );
 
 wire [31:0] bus;
@@ -58,6 +59,7 @@ wire [15:0] r0_15in; // A 16-bit wide signal, where each bit represents an enabl
 wire [15:0] r0_15out; // A 16-bit wide signal, where each bit represents an out signal for a register.
 wire [31:0] c_sign_extended_connection; // wire to connect select and encode logic to c_sign_extended
 wire [31:0] m_data_in; // wire to connect ram to mdr_mux => mdr
+// wire con_out; // output of conff
 
 // Register enable signals
 wire r0_enable;
@@ -174,7 +176,7 @@ reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
 c_sign_extended_reg c_sign_extended(clk, clr, c_sign_extended_connection, c_sign_extended_data);
 pc_reg pc(clk, pc_enable, pc_increment, bus, pc_data);
 
-// TODO: Instantiate RAM, SEE IF THESE ARE THE RIGHT CONNECTIONS
+// Instantiate RAM, SEE IF THESE ARE THE RIGHT CONNECTIONS
 ram_512x32 ram_memory(
     .clk(clk),
     .addr(mar_data),
@@ -184,7 +186,6 @@ ram_512x32 ram_memory(
 );
 
 
-// TODO: TEST THIS
 // Instantiate I/O ports
 inport inport(clk, clr, inport_enable, m_data_in, inport_data);
 outport outport(clk, clr, outport_enable, bus, outport_data);
@@ -199,8 +200,14 @@ mdr_mux_2_to_1 mdr_mux(
 );
 
 // TODO: Instantiate CON FF Logic
+conff conff(
+    .bus(bus),
+    .c2(ir_data[22:19]),
+    .con_enable(con_enable),
+    .condition(con_out)
+);
 
-// TODO: Instantiate select and encode logic
+// Instantiate select and encode logic
 select_encode_logic select_encode(
     .ir(ir_data),
     .gra(gra),
