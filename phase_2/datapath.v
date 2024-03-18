@@ -6,6 +6,7 @@ module datapath (
     input lo_out,
     input outport_enable,
     input inport_enable,
+    input inport_out,
     input mdr_out, 
     input mar_enable, 
     input z_enable, 
@@ -111,7 +112,7 @@ wire y_out = 0;
 //wire zlo_out = 0;
 //wire mar_out = 0;
 //wire mdr_out = 0;
-wire inport_out = 0;
+// wire inport_out = 0;
 // wire c_sign_extended_out = 0;
 
 // Register output data wires (connect to the bus)
