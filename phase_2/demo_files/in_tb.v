@@ -9,7 +9,7 @@ reg lo_out;
 reg outport_enable;
 reg inport_enable;
 reg inport_out;
-reg mdr_out; 
+reg mdr_out;
 reg mar_enable; 
 reg z_enable;
 reg lo_enable;
@@ -32,7 +32,9 @@ reg gra;
 reg grb;
 reg grc;
 reg ba_out;
+reg [31:0] inport_in;
 wire [31:0] zlo_data;
+wire [31:0] outport_data;
 
 // Instantiate the DUT
 datapath DUT(
@@ -67,7 +69,9 @@ datapath DUT(
     .grb(grb),
     .grc(grc),
     .ba_out(ba_out),
+	.inport_in(inport_in),
 	.zlo_data(zlo_data),
+	.outport_data(outport_data),
     .con_out(con_out)
 );
 
@@ -136,6 +140,7 @@ begin
 			r_in <= 0; r_out <= 0; gra <= 0; grb <= 0; grc <= 0; ba_out <= 0;
 			c_sign_extended_out <= 0; hi_out <= 0; lo_out <= 0; r15_enable <= 0;
             outport_enable <= 0; inport_enable <= 0; inport_out <= 0;
+			inport_in <= 32'h0000beef;
 		end
 		
 		// present_state: 1

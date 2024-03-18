@@ -16,22 +16,9 @@ module datapath (
     input ir_enable, 
     input y_enable, 
     input pc_increment, 
-    input r1_enable,
-    input r2_enable,
-    input r3_enable,
-    input r4_enable,
-    input r5_enable,
-    input r6_enable,
-    input r7_enable,
     input r15_enable,
     input lo_enable,
     input hi_enable,
-    input r2_out,
-    input r3_out,
-    input r4_out,
-    input r5_out,
-    input r6_out,
-    input r7_out,
     input c_sign_extended_out,
     input clr, 
     input clk,
@@ -43,9 +30,9 @@ module datapath (
     input grb,
     input grc,
     input ba_out,
-    // input [4:0] op_code,
-    // input [31:0] m_data_in,
+    input [31:0] inport_in,
     output [31:0] zlo_data,
+    output [31:0] outport_data,
     output con_out
 );
 
@@ -187,7 +174,7 @@ ram_512x32 ram_memory(
 
 
 // Instantiate I/O ports
-inport inport(clk, clr, inport_enable, m_data_in, inport_data);
+inport inport(clk, clr, inport_enable, inport_in, inport_data);
 outport outport(clk, clr, outport_enable, bus, outport_data);
 
 
