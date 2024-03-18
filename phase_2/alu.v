@@ -163,6 +163,11 @@ always @(*) begin
 			c[31:0] = add_result[31:0];
 			c[63:32] = 32'b0;
 		end
+
+		jal_opcode: begin
+			c[31:0] = add_result[31:0];
+			c[63:32] = 32'b0;
+		end
 	endcase
 end
 

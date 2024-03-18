@@ -18,6 +18,7 @@ module datapath (
     input r5_enable,
     input r6_enable,
     input r7_enable,
+    input r15_enable,
     input lo_enable,
     input hi_enable,
     input r2_out,
@@ -69,7 +70,7 @@ wire r11_enable;
 wire r12_enable;
 wire r13_enable;
 wire r14_enable;
-wire r15_enable;
+// wire r15_enable;
 //wire y_enable;
 //wire hi_enable;
 //wire lo_enable;
@@ -140,7 +141,7 @@ wire [31:0] ir_data;
 
 
 // Instantiate register modules
-r0_reg r0(clk, clr, r0_15in[0], ba_out, bus, r0_data);   // TODO: TEST THIS
+r0_reg r0(clk, clr, r0_15in[0], ba_out, bus, r0_data);
 reg_32_bit r1(clk, clr, r0_15in[1], bus, r1_data);
 reg_32_bit r2(clk, clr, r0_15in[2], bus, r2_data);
 reg_32_bit r3(clk, clr, r0_15in[3], bus, r3_data);
@@ -155,7 +156,7 @@ reg_32_bit r11(clk, clr, r0_15in[11], bus, r11_data);
 reg_32_bit r12(clk, clr, r0_15in[12], bus, r12_data);
 reg_32_bit r13(clk, clr, r0_15in[13], bus, r13_data);
 reg_32_bit r14(clk, clr, r0_15in[14], bus, r14_data);
-reg_32_bit r15(clk, clr, r0_15in[15], bus, r15_data);
+reg_32_bit r15(clk, clr, r15_enable, bus, r15_data);    // FIXME: r15_enable is temporary for phase 2
 
 reg_32_bit y(clk, clr, y_enable, bus, y_data);
 reg_32_bit hi(clk, clr, hi_enable, bus, hi_data);

@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module jr_tb; 	
+module jal_tb; 	
 reg pc_out; 
 reg zlo_out; 
 reg zhi_out;
@@ -22,6 +22,7 @@ reg r4_enable;
 reg r5_enable;
 reg r6_enable;
 reg r7_enable;
+reg r15_enable;
 reg r2_out;
 reg r3_out;
 reg r4_out;
@@ -51,10 +52,11 @@ parameter T2_ldi = 5'b00011;
 parameter T3_ldi = 5'b00100;
 parameter T4_ldi = 5'b00101;
 parameter T5_ldi = 5'b00110;
-parameter T0_jr = 5'b00111; 
-parameter T1_jr = 5'b01000;
-parameter T2_jr = 5'b01001;
-parameter T3_jr = 5'b01010;
+parameter T0_jal = 5'b00111; 
+parameter T1_jal = 5'b01000;
+parameter T2_jal = 5'b01001;
+parameter T3_jal = 5'b01010;
+parameter T4_jal = 5'b01011;
 
 reg	[4:0] present_state = start;
 
@@ -100,6 +102,7 @@ datapath DUT(
 	.r5_enable(r5_enable),
 	.r6_enable(r6_enable),
 	.r7_enable(r7_enable),
+    .r15_enable(r15_enable),
 	.lo_enable(lo_enable),
 	.hi_enable(hi_enable),
 	.r2_out(r2_out),
@@ -151,11 +154,11 @@ begin
             T2_ldi  	: present_state = T3_ldi;
             T3_ldi  	: present_state = T4_ldi;
             T4_ldi  	: present_state = T5_ldi;
-            T5_ldi  	: present_state = T0_jr;
-            T0_jr     : present_state = T1_jr;
-			T1_jr     : present_state = T2_jr;
-			T2_jr     : present_state = T3_jr;
-
+            T5_ldi  	: present_state = T0_jal;
+            T0_jal     : present_state = T1_jal;
+			T1_jal     : present_state = T2_jal;
+			T2_jal     : present_state = T3_jal;
+            T3_jal     : present_state = T4_jal;
         endcase
     end
 end
@@ -216,30 +219,36 @@ begin
 		end
 
 		// present_state: 7
-		T0_jr: begin
+		T0_jal: begin
 			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
 			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
 			#20 pc_out <= 0; z_enable <= 0;
 		end
 
 		// present_state: 8
-		T1_jr: begin
+		T1_jal: begin
 			// jr R6 : 10100_0110_0000_0000000000000000000
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
 			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 		end
 
 		// present_state: 9
-		T2_jr: begin
+		T2_jal: begin
 			mdr_out <= 1; ir_enable <= 1; 
 			#20 mdr_out<= 0; ir_enable <= 0;
 		end
 
 		// present_state: a
-		T3_jr: begin	
-			gra <= 1; r_out <= 1; pc_enable <= 1;
-			#20 gra <= 0; r_out <= 0; pc_enable <= 0;
+		T3_jal: begin	
+			pc_out <= 1; pc_increment <= 1;
+			#20 pc_increment <= 0; r15_enable <= 1;
+            #20 pc_out <= 0; r15_enable <= 0;
 		end
+
+        // present_state: b
+        T4_jal: begin
+            pc_enable <= 1; gra <= 1; r_out <= 1;
+        end
 	endcase
 end
 endmodule
