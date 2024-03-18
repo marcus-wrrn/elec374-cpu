@@ -57,6 +57,9 @@ localparam div_opcode = 5'b10000;
 localparam neg_opcode = 5'b10001;
 localparam not_opcode = 5'b10010;
 
+localparam jr_opcode = 5'b10100;
+localparam jal_opcode = 5'b10101;
+
 // Select the internal result based on the opcode
 always @(*) begin
 	case (op_code) 
@@ -153,6 +156,11 @@ always @(*) begin
 
 		not_opcode: begin
 			c[31:0] = not_result;
+			c[63:32] = 32'b0;
+		end
+
+		jr_opcode: begin
+			c[31:0] = add_result[31:0];
 			c[63:32] = 32'b0;
 		end
 	endcase
