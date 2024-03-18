@@ -2,6 +2,7 @@ module datapath (
     input pc_out, 
     input zlo_out,
     input zhi_out,
+    input hi_out,
     input mdr_out, 
     input mar_enable, 
     input z_enable, 
@@ -101,7 +102,7 @@ wire r14_out = 0;
 wire r15_out = 0;
 //wire pc_out = 0;
 wire y_out = 0;
-wire hi_out = 0;
+// wire hi_out = 0;
 wire lo_out = 0;
 // wire zhi_out = 0;
 //wire zlo_out = 0;

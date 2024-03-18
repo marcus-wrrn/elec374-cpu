@@ -2,8 +2,9 @@
 
 module mfhi_tb; 	
 reg pc_out; 
-reg zlo_out; 
+reg zlo_out;
 reg zhi_out;
+reg hi_out;
 reg mdr_out; 
 reg mar_enable; 
 reg z_enable;
@@ -86,6 +87,7 @@ datapath DUT(
 	.pc_out(pc_out), 
 	.zlo_out(zlo_out), 
 	.zhi_out(zhi_out),
+    .hi_out(hi_out),
 	.mdr_out(mdr_out), 
 	.mar_enable(mar_enable), 
 	.z_enable(z_enable), 
@@ -177,7 +179,7 @@ begin
 			r1_enable <= 0; r2_enable <= 0; r3_enable <= 0; r4_enable <= 0; r5_enable <= 0; r6_enable <= 0; r7_enable <= 0;
 			// m_data_in <= 32'h00000000;
 			con_enable <= 0; ram_write <= 0; r_in <= 0; r_out <= 0; gra <= 0; grb <= 0; grc <= 0; ba_out <= 0;
-			c_sign_extended_out <= 0;
+			c_sign_extended_out <= 0; hi_out <= 0; r15_enable <= 0;
 		end
 		
 		// present_state: 1
@@ -218,37 +220,36 @@ begin
 			#20 zlo_out <= 0; hi_enable <= 0;
 		end
 
-		// // present_state: 7
-		// T0_jal: begin
-		// 	pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
-		// 	#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
-		// 	#20 pc_out <= 0; z_enable <= 0;
-		// end
+		// present_state: 7
+		T0_jal: begin
+			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
+			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
+			#20 pc_out <= 0; z_enable <= 0;
+		end
 
-		// // present_state: 8
-		// T1_jal: begin
-		// 	// jr R6 : 10100_0110_0000_0000000000000000000
-		// 	read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
-		// 	#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
-		// end
+		// present_state: 8
+		T1_jal: begin
+			// jr R6 : 10100_0110_0000_0000000000000000000
+			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
+			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
+		end
 
-		// // present_state: 9
-		// T2_jal: begin
-		// 	mdr_out <= 1; ir_enable <= 1; 
-		// 	#20 mdr_out<= 0; ir_enable <= 0;
-		// end
+		// present_state: 9
+		T2_jal: begin
+			mdr_out <= 1; ir_enable <= 1; 
+			#20 mdr_out<= 0; ir_enable <= 0;
+		end
 
-		// // present_state: a
-		// T3_jal: begin	
-		// 	pc_out <= 1; pc_increment <= 1;
-		// 	#20 pc_increment <= 0; r15_enable <= 1;
-        //     #20 pc_out <= 0; r15_enable <= 0;
-		// end
+		// present_state: a
+		T3_jal: begin	
+			hi_out <= 1; gra <= 1; r_in <= 1;
+            #20 hi_out <= 0; gra <= 0; r_in <= 0;
+		end
 
-        // // present_state: b
-        // T4_jal: begin
-        //     pc_enable <= 1; gra <= 1; r_out <= 1;
-        // end
+        // present_state: b
+        T4_jal: begin
+            
+        end
 	endcase
 end
 endmodule
