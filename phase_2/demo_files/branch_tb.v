@@ -20,20 +20,7 @@ reg read;
 reg ir_enable; 
 reg y_enable;
 reg pc_increment; 
-reg r1_enable; 
-reg r2_enable; 
-reg r3_enable;
-reg r4_enable;
-reg r5_enable;
-reg r6_enable;
-reg r7_enable;
 reg r15_enable;
-reg r2_out;
-reg r3_out;
-reg r4_out;
-reg r5_out;
-reg r6_out;
-reg r7_out;
 reg c_sign_extended_out;
 reg clk; 
 reg clr;
@@ -45,48 +32,7 @@ reg gra;
 reg grb;
 reg grc;
 reg ba_out;
-// reg [4:0] op_code; 
-// reg [31:0] m_data_in;
 wire [31:0] zlo_data;
-
-// FSM signals
-parameter start = 5'b00000; 
-parameter T0_ldi = 5'b00001;
-parameter T1_ldi = 5'b00010;
-parameter T2_ldi = 5'b00011;
-parameter T3_ldi = 5'b00100;
-parameter T4_ldi = 5'b00101;
-parameter T5_ldi = 5'b00110;
-parameter T0_brzr = 5'b00111; 
-parameter T1_brzr = 5'b01000;
-parameter T2_brzr = 5'b01001;
-parameter T3_brzr = 5'b01010;
-parameter T4_brzr = 5'b01011;
-parameter T5_brzr = 5'b01100;
-parameter T6_brzr = 5'b01101;
-
-reg	[4:0] present_state = start;
-
-// Opcodes for operations
-parameter ld_opcode = 5'b00000;
-parameter ldi_opcode = 5'b00001;
-parameter st_opcode = 5'b00010;
-parameter add_opcode = 5'b00011;
-parameter sub_opcode = 5'b00100;
-parameter shr_opcode = 5'b00101;
-parameter shra_opcode = 5'b00110;
-parameter shl_opcode = 5'b00111;
-parameter ror_opcode = 5'b01000;
-parameter rol_opcode = 5'b01001;
-parameter and_opcode = 5'b01010;
-parameter or_opcode = 5'b01011;
-parameter addi_opcode = 5'b01100;
-parameter andi_opcode = 5'b01101;
-parameter ori_opcode = 5'b01110;
-parameter mul_opcode = 5'b01111;
-parameter div_opcode = 5'b10000;
-parameter neg_opcode = 5'b10001;
-parameter not_opcode = 5'b10010;
 
 // Instantiate the DUT
 datapath DUT(
@@ -104,25 +50,12 @@ datapath DUT(
 	.ir_enable(ir_enable), 
 	.y_enable(y_enable), 
 	.pc_increment(pc_increment),
-	.r1_enable(r1_enable),
-	.r2_enable(r2_enable),
-	.r3_enable(r3_enable),
-	.r4_enable(r4_enable),
-	.r5_enable(r5_enable),
-	.r6_enable(r6_enable),
-	.r7_enable(r7_enable),
     .r15_enable(r15_enable),
 	.lo_enable(lo_enable),
 	.hi_enable(hi_enable),
     .outport_enable(outport_enable),
     .inport_enable(inport_enable),
     .inport_out(inport_out),
-	.r2_out(r2_out),
-	.r3_out(r3_out),
-	.r4_out(r4_out),
-	.r5_out(r5_out),
-	.r6_out(r6_out),
-	.r7_out(r7_out),
 	.c_sign_extended_out(c_sign_extended_out),
 	.clr(clr), 
 	.clk(clk),
@@ -134,11 +67,27 @@ datapath DUT(
     .grb(grb),
     .grc(grc),
     .ba_out(ba_out),
-    // .op_code(op_code),
-	// .m_data_in(m_data_in),
 	.zlo_data(zlo_data),
     .con_out(con_out)
 );
+
+// FSM signals
+parameter start = 5'b00000; 
+parameter T0_ldi = 5'b00001;
+parameter T1_ldi = 5'b00010;
+parameter T2_ldi = 5'b00011;
+parameter T3_ldi = 5'b00100;
+parameter T4_ldi = 5'b00101;
+parameter T5_ldi = 5'b00110;
+parameter T0_br = 5'b00111; 
+parameter T1_br = 5'b01000;
+parameter T2_br = 5'b01001;
+parameter T3_br = 5'b01010;
+parameter T4_br = 5'b01011;
+parameter T5_br = 5'b01100;
+parameter T6_br = 5'b01101;
+
+reg	[4:0] present_state = start;
 
 // Initialize the clock signals
 initial begin
@@ -167,13 +116,13 @@ begin
             T2_ldi  	: present_state = T3_ldi;
             T3_ldi  	: present_state = T4_ldi;
             T4_ldi  	: present_state = T5_ldi;
-            T5_ldi  	: present_state = T0_brzr;
-            T0_brzr     : present_state = T1_brzr;
-			T1_brzr     : present_state = T2_brzr;
-			T2_brzr     : present_state = T3_brzr;
-            T3_brzr     : present_state = T4_brzr;
-            T4_brzr     : present_state = T5_brzr;
-            T5_brzr     : present_state = T6_brzr;
+            T5_ldi  	: present_state = T0_br;
+            T0_br     	: present_state = T1_br;
+			T1_br     	: present_state = T2_br;
+			T2_br     	: present_state = T3_br;
+            T3_br     	: present_state = T4_br;
+            T4_br     	: present_state = T5_br;
+            T5_br     	: present_state = T6_br;
         endcase
     end
 end
@@ -185,13 +134,10 @@ begin
 		// Set all signals to 0
 		start: begin	
 			pc_out <= 0; zlo_out <= 0; zhi_out <= 0; lo_enable <= 0; hi_enable <= 0; mdr_out <= 0;
-			r2_out <= 0; r3_out <= 0; r4_out <= 0; r5_out <= 0; r6_out <= 0; r7_out <= 0;
 			pc_enable <= 0; mdr_enable <= 0; mar_enable <= 0; 
 			ir_enable <= 0; y_enable <= 0; pc_increment <= 0;   
-			read <= 0;  z_enable <= 0; //op_code <= 0;
-			r1_enable <= 0; r2_enable <= 0; r3_enable <= 0; r4_enable <= 0; r5_enable <= 0; r6_enable <= 0; r7_enable <= 0;
-			// m_data_in <= 32'h00000000;
-			con_enable <= 0; ram_write <= 0; r_in <= 0; r_out <= 0; gra <= 0; grb <= 0; grc <= 0; ba_out <= 0;
+			read <= 0;  z_enable <= 0; con_enable <= 0; ram_write <= 0; 
+			r_in <= 0; r_out <= 0; gra <= 0; grb <= 0; grc <= 0; ba_out <= 0;
 			c_sign_extended_out <= 0; hi_out <= 0; lo_out <= 0; r15_enable <= 0;
             outport_enable <= 0; inport_enable <= 0; inport_out <= 0;
 		end
@@ -205,7 +151,6 @@ begin
 
 		// present_state: 2
 		T1_ldi: begin
-			// ldi R3, 0xbeef : 00001_0011_0000_0001011111011101111
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
 			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 		end
@@ -235,45 +180,44 @@ begin
 		end
 
 		// present_state: 7
-		T0_brzr: begin
+		T0_br: begin
 			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; 
 			#20 mar_enable <= 0; pc_increment <= 0; z_enable <= 1;
 			#20 pc_out <= 0; z_enable <= 0;
 		end
 
 		// present_state: 8
-		T1_brzr: begin
-			// mflo R7 : 11001_0111_0000_0000000000000000000
+		T1_br: begin
 			read <= 1; mdr_enable <= 1; pc_enable <= 1; zlo_out <= 1;
 			#20 read <= 0; mdr_enable <= 0; pc_enable <= 0; zlo_out <= 0;
 		end
 
 		// present_state: 9
-		T2_brzr: begin
+		T2_br: begin
 			mdr_out <= 1; ir_enable <= 1; 
 			#20 mdr_out<= 0; ir_enable <= 0;
 		end
 
 		// present_state: a
-		T3_brzr: begin	
+		T3_br: begin	
 			gra <= 1; r_out <= 1; con_enable <= 1;
             #20 gra <= 0; r_out <= 0; con_enable <= 0;
 		end
 
         // present_state: b
-        T4_brzr: begin
+        T4_br: begin
             pc_out <= 1; y_enable <= 1;
             #20 pc_out <= 0; y_enable <= 0;
         end
 
         // present_state: c
-        T5_brzr: begin
+        T5_br: begin
             c_sign_extended_out <= 1; z_enable <= 1;
             #20 c_sign_extended_out <= 0; z_enable <= 0;
         end
 
         // present_state: d
-        T6_brzr: begin
+        T6_br: begin
             if (con_out == 1) begin
                 zlo_out <= 1; pc_enable <= 1; 
                 #20 zlo_out <= 0; pc_enable <= 0; pc_increment <= 1;
