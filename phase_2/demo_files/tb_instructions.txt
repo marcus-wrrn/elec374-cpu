@@ -76,24 +76,24 @@ jal R6              // 10101_0110_0000_0000000000000000000
 0B00000F
 AB000000
 
-mfhi case:
+mfhi case: (loads 0xbeef into HI, loads [HI] into R6)
 ldi HI, 0xbeef      // 00001_0000_0000_0001011111011101111
 mfhi R6             // 11000_0110_0000_0000000000000000000
 0800BEEF
 C3000000
 
-mflo case:
+mflo case: (loads 0xbeef into LO, loads [LO] into R7)
 ldi LO, 0xbeef      // 00001_0000_0000_0001011111011101111
 mflo R7             // 11001_0111_0000_0000000000000000000
 0800BEEF
 CB800000
 
-out case: 
+out case: (loads 0xbeef into R3, loads [R3] into outport)
 ldi R3, 0xbeef      // 00001_0011_0000_0001011111011101111
 out R3              // 10111_0011_0000_0000000000000000000
 0980BEEF
 B9800000
 
-in case:
+in case: (inport is preloaded with 0xbeef, then loads [inport] into R4)
 in R4               // 10110_0100_0000_0000000000000000000
 B2000000
