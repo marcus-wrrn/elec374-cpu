@@ -40,37 +40,37 @@ ori R3, R4, 0x53    // 01110_0011_0100_0000000000001010011
 0A00000F
 71A00053
 
-brzr case:
+brzr case: (loads 0 into R5, branches cause = 0)
 ldi R5, 0x0         // 00001_0101_0000_0000000000000000000
 brzr R5             // 10011_0101_0000_0000000000000001110
 0A800000
 9A80000E
 
-brnz case:
+brnz case: (loads 0 into R5, does not branch cause = 0)
 ldi R5, 0x0         // 00001_0101_0000_0000000000000000000
 brnz R5             // 10011_0101_0001_0000000000000001110
 0A800000
 9A88000E
 
-brpl case:
+brpl case: (loads 0 into R5, branches because >= 0)
 ldi R5, 0x0         // 00001_0101_0000_0000000000000000000
 brpl R5             // 10011_0101_0010_0000000000000001110
 0A800000
 9A90000E
 
-brmi case:
+brmi case: (loads 0 into R5, does not branch because >= 0)
 ldi R5, 0x0         // 00001_0101_0000_0000000000000000000
 brmi R5             // 10011_0101_0011_0000000000000001110
 0A800000
 9A98000E
 
-jr case:
+jr case: (loads 15 into R6, then branches to [R6])
 ldi R6, 0xf         // 00001_0110_0000_0000000000000001111
 jr R6               // 10100_0110_0000_0000000000000000000
 0B00000F
 A3000000
 
-jal case:
+jal case: (loads 15 into R6, loads [PC] + 1 into R15, loads [R6] into PC)
 ldi R6, 0xf         // 00001_0110_0000_0000000000000001111
 jal R6              // 10101_0110_0000_0000000000000000000
 0B00000F

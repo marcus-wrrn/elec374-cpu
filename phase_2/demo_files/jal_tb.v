@@ -204,6 +204,7 @@ begin
         // present_state: b
         T4_jal: begin
             pc_enable <= 1; gra <= 1; r_out <= 1;
+			#20 pc_enable <= 0; gra <= 0; r_out <= 0;
         end
 	endcase
 end
