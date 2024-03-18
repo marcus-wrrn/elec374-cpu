@@ -91,6 +91,21 @@ always @(*) begin
 			c[63:32] = 32'b0;
 		end
 
+		addi_opcode: begin
+			c[31:0] = add_result;
+			c[63:32] = 32'b0;
+		end
+
+		andi_opcode: begin
+			c[31:0] = and_result;
+			c[63:32] = 32'b0;
+		end
+
+		ori_opcode: begin
+			c[31:0] = or_result;
+			c[63:32] = 32'b0;
+		end
+
 		sub_opcode: begin
 			c[31:0] = sub_result;
 			c[63:32] = 32'b0;
