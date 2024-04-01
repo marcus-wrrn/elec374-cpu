@@ -107,6 +107,9 @@ parameter st4 = 6'b100010;
 parameter st5 = 6'b100011;
 parameter st6 = 6'b100100;
 parameter st7 = 6'b100101;
+parameter and_or3 = 6'b100110;       // and & or
+parameter and_or4 = 6'b100111;
+parameter and_or5 = 6'b101000;
 
 
 reg [5:0] present_state = reset_state;
@@ -143,6 +146,8 @@ always @(posedge clk, posedge reset) begin
                         shr_opcode:     present_state <= sh3;
                         shl_opcode:     present_state <= sh3;
                         st_opcode:      present_state <= st3;
+                        and_opcode:     present_state <= and_or3;
+                        or_opcode:      present_state <= and_or3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -190,6 +195,10 @@ always @(posedge clk, posedge reset) begin
                 st5: present_state <= st6;
                 st6: present_state <= st7;
                 st7: present_state <= fetch0;
+                // and & or
+                and_or3: present_state <= and_or4;
+                and_or4: present_state <= and_or5;
+                and_or5: present_state <= fetch0;
 
                 // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
@@ -406,6 +415,19 @@ begin
         st7: begin
             ram_write <= 1;
             #20 ram_write <= 0;
+        end
+
+        and_or3: begin
+            grb <= 1; r_out <= 1; y_enable <= 1;
+            #20 grb <= 0; r_out <= 0; y_enable <= 0;
+        end
+        and_or4: begin
+            grc <= 1; r_out <= 1; z_enable <= 1;
+            #20 grc <= 0; r_out <= 0; z_enable <= 0;
+        end
+        and_or5: begin
+            zlo_out <= 1; gra <= 1; r_in <= 1;
+            #20 zlo_out <= 0; gra <= 0; r_in <= 0;
         end
         // TODO: FILL IN JOBS
     endcase
