@@ -91,6 +91,8 @@ parameter add5 = 6'b010011;
 parameter addi3 = 6'b010100;          // addi
 parameter addi4 = 6'b010101;
 parameter addi5 = 6'b010110;
+parameter neg3 = 6'b010111;           // neg
+parameter neg4 = 6'b011000;
 
 reg [5:0] present_state = reset_state;
 
@@ -116,6 +118,7 @@ always @(posedge clk, posedge reset) begin
                         nop_opcode:     present_state <= nop3;
                         add_opcode:     present_state <= add3;
                         addi_opcode:    present_state <= addi3;
+                        neg_opcode:     present_state <= neg3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -146,6 +149,9 @@ always @(posedge clk, posedge reset) begin
                 addi3: present_state <= addi4;
                 addi4: present_state <= addi5;
                 addi5: present_state <= fetch0;
+                // neg
+                neg3: present_state <= neg4;
+                neg4: present_state <= fetch0;
 
                 // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
@@ -295,6 +301,16 @@ begin
 			zlo_out <= 1; gra <= 1; r_in <= 1;
 			#20 zlo_out <= 0; gra <= 0;  r_in <= 0;
 		end
+
+        // neg instruction
+        neg3: begin
+            grb <= 1; r_out <= 1; z_enable <= 1;
+            #20 grb <= 0; r_out <= 0; z_enable <= 0;
+        end
+        neg4: begin
+            zlo_out <= 1; gra <= 1; r_in <= 1;
+            #20 zlo_out <= 0; gra <= 0; r_in <= 0;
+        end
         // TODO: FILL IN JOBS
     endcase
 end
