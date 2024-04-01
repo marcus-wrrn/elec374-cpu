@@ -1,39 +1,9 @@
 module datapath (
-    input pc_out, 
-    input zlo_out,
-    input zhi_out,
-    input hi_out,
-    input lo_out,
-    input outport_enable,
-    input inport_enable,
-    input inport_out,
-    input mdr_out, 
-    input mar_enable, 
-    input z_enable, 
-    input pc_enable, 
-    input mdr_enable, 
-    input read, 
-    input ir_enable, 
-    input y_enable, 
-    input pc_increment, 
-    input r15_enable,
-    input lo_enable,
-    input hi_enable,
-    input c_sign_extended_out,
-    input clr, 
+    input reset,
+    input stop,
     input clk,
-    input con_enable,
-    input ram_write,
-    input r_in,
-    input r_out,
-    input gra,
-    input grb,
-    input grc,
-    input ba_out,
     input [31:0] inport_in,
-    output [31:0] zlo_data,
-    output [31:0] outport_data,
-    output con_out
+    output [31:0] outport_data
 );
 
 wire [31:0] bus;
@@ -46,17 +16,17 @@ wire [15:0] r0_15in; // A 16-bit wide signal, where each bit represents an enabl
 wire [15:0] r0_15out; // A 16-bit wide signal, where each bit represents an out signal for a register.
 wire [31:0] c_sign_extended_connection; // wire to connect select and encode logic to c_sign_extended
 wire [31:0] m_data_in; // wire to connect ram to mdr_mux => mdr
-// wire con_out; // output of conff
+wire con_out; // output of conff
 
 // Register enable signals
 wire r0_enable;
-// wire r1_enable;
-// wire r2_enable;
-// wire r3_enable;
-// wire r4_enable;
-// wire r5_enable;
-// wire r6_enable;
-// wire r7_enable;
+wire r1_enable;
+wire r2_enable;
+wire r3_enable;
+wire r4_enable;
+wire r5_enable;
+wire r6_enable;
+wire r7_enable;
 wire r8_enable;
 wire r9_enable;
 wire r10_enable;
@@ -64,27 +34,26 @@ wire r11_enable;
 wire r12_enable;
 wire r13_enable;
 wire r14_enable;
-// wire r15_enable;
-//wire y_enable;
-//wire hi_enable;
-//wire lo_enable;
-//wire z_enable;
-//wire z_enable;
-//wire pc_enable;
-//wire mar_enable;
-//wire mdr_enable;
-//wire ir_enable;
+wire r15_enable;
+wire y_enable;
+wire hi_enable;
+wire lo_enable;
+wire z_enable;
+wire pc_enable;
+wire mar_enable;
+wire mdr_enable;
+wire ir_enable;
 wire c_sign_extended_enable;
 
 // Register output flags
 wire r0_out = 0;
 wire r1_out = 0;
-// wire r2_out = 0;
-// wire r3_out = 0;
-// wire r4_out = 0;
-// wire r5_out = 0;
-// wire r6_out = 0;
-// wire r7_out = 0;
+wire r2_out = 0;
+wire r3_out = 0;
+wire r4_out = 0;
+wire r5_out = 0;
+wire r6_out = 0;
+wire r7_out = 0;
 wire r8_out = 0;
 wire r9_out = 0;
 wire r10_out = 0;
@@ -93,14 +62,14 @@ wire r12_out = 0;
 wire r13_out = 0;
 wire r14_out = 0;
 wire r15_out = 0;
-//wire pc_out = 0;
+// wire pc_out = 0;
 wire y_out = 0;
 // wire hi_out = 0;
 // wire lo_out = 0;
 // wire zhi_out = 0;
-//wire zlo_out = 0;
-//wire mar_out = 0;
-//wire mdr_out = 0;
+// wire zlo_out = 0;
+wire mar_out = 0;
+// wire mdr_out = 0;
 // wire inport_out = 0;
 // wire c_sign_extended_out = 0;
 
@@ -128,7 +97,7 @@ wire [31:0] lo_data;
 wire [31:0] zhi_data;
 wire [31:0] mdr_data;
 wire [31:0] mar_data;
-// wire [31:0] zlo_data;
+wire [31:0] zlo_data;
 wire [31:0] inport_data;
 wire [31:0] c_sign_extended_data;
 wire [31:0] ir_data;
@@ -152,16 +121,60 @@ reg_32_bit r13(clk, clr, r0_15in[13], bus, r13_data);
 reg_32_bit r14(clk, clr, r0_15in[14], bus, r14_data);
 reg_32_bit r15(clk, clr, r15_enable, bus, r15_data);    // FIXME: r15_enable is temporary for phase 2
 
-reg_32_bit y(clk, clr, y_enable, bus, y_data);
+reg_32_bit y(clk, y_clr, y_enable, bus, y_data);
 reg_32_bit hi(clk, clr, hi_enable, bus, hi_data);
 reg_32_bit lo(clk, clr, lo_enable, bus, lo_data);
 reg_32_bit zlo(clk, clr, z_enable, alu_out[31:0], zlo_data);
 reg_32_bit zhi(clk, clr, z_enable, alu_out[63:32], zhi_data);
-reg_32_bit ir(clk, clr, ir_enable, bus, ir_data);
+reg_32_bit ir(clk, ir_clr, ir_enable, bus, ir_data);
 reg_32_bit mar(clk, clr, mar_enable, bus, mar_data);
 reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
 c_sign_extended_reg c_sign_extended(clk, clr, c_sign_extended_connection, c_sign_extended_data);
 pc_reg pc(clk, pc_enable, pc_increment, bus, pc_data);
+
+// Instantiate Control Unit
+control_unit control_unit(
+    .clk(clk),
+    .reset(reset),
+    .stop(stop),
+    .con_ff(con_out),
+    .ir(ir_data),
+
+    .inport_out(inport_out),
+    .read(read),
+    .ram_write(ram_write),
+
+    .hi_enable(hi_enable),
+    .lo_enable(lo_enable),
+    .con_enable(con_enable),
+    .pc_enable(pc_enable),
+    .ir_enable(ir_enable),
+    .y_enable(y_enable),
+    .z_enable(z_enable),
+    .mar_enable(mar_enable),
+    .mdr_enable(mdr_enable),
+    .outport_enable(outport_enable),
+    .c_sign_extended_out(c_sign_extended_out),
+    .ba_out(ba_out),
+
+    .gra(gra),
+    .grb(grb),
+    .grc(grc),
+    .r_in(r_in),
+    .r_out(r_out),
+    .hi_out(hi_out),
+    .lo_out(lo_out),
+    .zhi_out(zhi_out),
+    .zlo_out(zlo_out),
+    .mdr_out(mdr_out),
+    .pc_out(pc_out),
+
+    .pc_increment(pc_increment),
+    .y_clr(y_clr),
+    .ir_clr(ir_clr),
+    .clr(clr),
+    .r15_enable(r15_enable)
+);
 
 // Instantiate RAM, SEE IF THESE ARE THE RIGHT CONNECTIONS
 ram_512x32 ram_memory(
