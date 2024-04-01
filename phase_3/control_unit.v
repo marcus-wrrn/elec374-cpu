@@ -86,9 +86,9 @@ parameter br4 = 6'b001101;
 parameter br5 = 6'b001110;
 parameter br6 = 6'b001111;
 parameter nop3 = 6'b010000;           // nop
-parameter add3 = 6'b010001;           // add
-parameter add4 = 6'b010010;
-parameter add5 = 6'b010011;
+parameter add_sub3 = 6'b010001;           // add
+parameter add_sub4 = 6'b010010;
+parameter add_sub5 = 6'b010011;
 parameter addi_andi_ori3 = 6'b010100;          // addi, andi & ori
 parameter addi_andi_ori4 = 6'b010101;
 parameter addi_andi_ori5 = 6'b010110;
@@ -134,7 +134,8 @@ always @(posedge clk, posedge reset) begin
                         ldi_opcode:     present_state <= ldi3;
                         branch_opcode:  present_state <= br3;
                         nop_opcode:     present_state <= nop3;
-                        add_opcode:     present_state <= add3;
+                        add_opcode:     present_state <= add_sub3;
+                        sub_opcode:     present_state <= add_sub3;
                         addi_opcode:    present_state <= addi_andi_ori3;
                         andi_opcode:    present_state <= addi_andi_ori3;
                         ori_opcode:     present_state <= addi_andi_ori3;
@@ -171,9 +172,9 @@ always @(posedge clk, posedge reset) begin
                 // nop
                 nop3: present_state <= fetch0;
                 // add
-                add3: present_state <= add4;
-                add4: present_state <= add5;
-                add5: present_state <= fetch0;
+                add_sub3: present_state <= add_sub4;
+                add_sub4: present_state <= add_sub5;
+                add_sub5: present_state <= fetch0;
                 // addi, andi & ori
                 addi_andi_ori3: present_state <= addi_andi_ori4;
                 addi_andi_ori4: present_state <= addi_andi_ori5;
@@ -200,7 +201,7 @@ always @(posedge clk, posedge reset) begin
                 and_or4: present_state <= and_or5;
                 and_or5: present_state <= fetch0;
 
-                // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
+                // TODO: FILL IN PRESENT STATES EX: add_sub3: present_state <= add_sub4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
             endcase
         end
@@ -322,15 +323,15 @@ begin
         end
 
         // add instruction
-        add3: begin
+        add_sub3: begin
             grb <= 1; r_out <= 1; y_enable <= 1;
             #20 grb <= 0; r_out <= 0; y_enable <= 0;
         end
-        add4: begin
+        add_sub4: begin
             grc <= 1; r_out <= 1; z_enable <= 1;
             #20 grc <= 0; r_out <= 0; z_enable <= 0;
         end
-        add5: begin
+        add_sub5: begin
             zlo_out <= 1; gra <= 1; r_in <= 1;
             #20 zlo_out <= 0; gra <= 0; r_in <= 0;
         end
