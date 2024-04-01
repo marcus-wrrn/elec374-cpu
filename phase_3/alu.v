@@ -62,6 +62,11 @@ localparam branch_opcode = 5'b10011;
 localparam jr_opcode = 5'b10100;
 localparam jal_opcode = 5'b10101;
 
+localparam in_opcode = 5'b10110;
+localparam out_opcode = 5'b10111;
+localparam mfhi_opcode = 5'b11000;
+localparam mflo_opcode = 5'b11001;
+
 localparam nop_opcode = 5'b11010;
 
 // Select the internal result based on the opcode

@@ -66,6 +66,10 @@ localparam not_opcode = 5'b10010;
 localparam branch_opcode = 5'b10011;
 localparam jr_opcode = 5'b10100;
 localparam jal_opcode = 5'b10101;
+localparam in_opcode = 5'b10110;
+localparam out_opcode = 5'b10111;
+localparam mfhi_opcode = 5'b11000;
+localparam mflo_opcode = 5'b11001;
 localparam nop_opcode = 5'b11010;
 
 // FSM signals
@@ -114,7 +118,8 @@ parameter mul3 = 6'b101001;          // mul
 parameter mul4 = 6'b101010;
 parameter mul5 = 6'b101011;
 parameter mul6 = 6'b101100;
-
+parameter mfhi3 = 6'b101101;         // mfhi
+parameter mflo3 = 6'b101110;         // mflo
 
 
 reg [5:0] present_state = reset_state;
@@ -155,6 +160,8 @@ always @(posedge clk, posedge reset) begin
                         and_opcode:     present_state <= and_or3;
                         or_opcode:      present_state <= and_or3;
                         mul_opcode:     present_state <= mul3;
+                        mfhi_opcode:    present_state <= mfhi3;
+                        mflo_opcode:    present_state <= mflo3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -211,6 +218,10 @@ always @(posedge clk, posedge reset) begin
                 mul4: present_state <= mul5;
                 mul5: present_state <= mul6;
                 mul6: present_state <= fetch0;
+                // mfhi
+                mfhi3: present_state <= fetch0;
+                // mflo
+                mflo3: present_state <= fetch0;
 
                 // TODO: FILL IN PRESENT STATES EX: add_sub3: present_state <= add_sub4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
@@ -459,6 +470,16 @@ begin
             zhi_out <= 1; hi_enable <= 1;
             #20 zhi_out <= 0; hi_enable <= 0;
         end
+        // mfhi instruction
+        mfhi3: begin	
+			hi_out <= 1; gra <= 1; r_in <= 1;
+            #20 hi_out <= 0; gra <= 0; r_in <= 0;
+		end
+        // mflo instruction
+        mflo3: begin	
+			lo_out <= 1; gra <= 1; r_in <= 1;
+            #20 lo_out <= 0; gra <= 0; r_in <= 0;
+		end
         // TODO: FILL IN JOBS
     endcase
 end
