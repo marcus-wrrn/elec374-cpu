@@ -110,6 +110,11 @@ parameter st7 = 6'b100101;
 parameter and_or3 = 6'b100110;       // and & or
 parameter and_or4 = 6'b100111;
 parameter and_or5 = 6'b101000;
+parameter mul3 = 6'b101001;          // mul
+parameter mul4 = 6'b101010;
+parameter mul5 = 6'b101011;
+parameter mul6 = 6'b101100;
+
 
 
 reg [5:0] present_state = reset_state;
@@ -149,6 +154,7 @@ always @(posedge clk, posedge reset) begin
                         st_opcode:      present_state <= st3;
                         and_opcode:     present_state <= and_or3;
                         or_opcode:      present_state <= and_or3;
+                        mul_opcode:     present_state <= mul3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -200,6 +206,11 @@ always @(posedge clk, posedge reset) begin
                 and_or3: present_state <= and_or4;
                 and_or4: present_state <= and_or5;
                 and_or5: present_state <= fetch0;
+                // mul
+                mul3: present_state <= mul4;
+                mul4: present_state <= mul5;
+                mul5: present_state <= mul6;
+                mul6: present_state <= fetch0;
 
                 // TODO: FILL IN PRESENT STATES EX: add_sub3: present_state <= add_sub4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
@@ -429,6 +440,24 @@ begin
         and_or5: begin
             zlo_out <= 1; gra <= 1; r_in <= 1;
             #20 zlo_out <= 0; gra <= 0; r_in <= 0;
+        end
+
+        // mul instruction
+        mul3: begin
+            gra <= 1; r_out <= 1; y_enable <= 1;
+            #20 gra <= 0; r_out <= 0; y_enable <= 0;
+        end
+        mul4: begin
+            grb <= 1; r_out <= 1; z_enable <= 1;
+            #20 grb <= 0; r_out <= 0; z_enable <= 0;
+        end
+        mul5: begin
+            zlo_out <= 1; lo_enable <= 1;
+            #20 zlo_out <= 0; lo_enable <= 0;
+        end
+        mul6: begin
+            zhi_out <= 1; hi_enable <= 1;
+            #20 zhi_out <= 0; hi_enable <= 0;
         end
         // TODO: FILL IN JOBS
     endcase
