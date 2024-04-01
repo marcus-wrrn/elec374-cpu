@@ -88,6 +88,9 @@ parameter nop3 = 6'b010000;           // nop
 parameter add3 = 6'b010001;           // add
 parameter add4 = 6'b010010;
 parameter add5 = 6'b010011;
+parameter addi3 = 6'b010100;          // addi
+parameter addi4 = 6'b010101;
+parameter addi5 = 6'b010110;
 
 reg [5:0] present_state = reset_state;
 
@@ -112,6 +115,7 @@ always @(posedge clk, posedge reset) begin
                         branch_opcode:  present_state <= br3;
                         nop_opcode:     present_state <= nop3;
                         add_opcode:     present_state <= add3;
+                        addi_opcode:    present_state <= addi3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -138,6 +142,10 @@ always @(posedge clk, posedge reset) begin
                 add3: present_state <= add4;
                 add4: present_state <= add5;
                 add5: present_state <= fetch0;
+                // addi
+                addi3: present_state <= addi4;
+                addi4: present_state <= addi5;
+                addi5: present_state <= fetch0;
 
                 // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
@@ -273,6 +281,20 @@ begin
             zlo_out <= 1; gra <= 1; r_in <= 1;
             #20 zlo_out <= 0; gra <= 0; r_in <= 0;
         end
+
+        // addi instruction
+        addi3: begin	
+			grb <= 1; r_out <= 1; y_enable <= 1;
+			#20 grb <= 0; r_out <= 0; y_enable <= 0;
+		end
+		addi4: begin	
+			c_sign_extended_out <= 1;  z_enable <= 1;
+			#20 c_sign_extended_out <= 0; z_enable <= 0;
+		end
+		addi5: begin
+			zlo_out <= 1; gra <= 1; r_in <= 1;
+			#20 zlo_out <= 0; gra <= 0;  r_in <= 0;
+		end
         // TODO: FILL IN JOBS
     endcase
 end
