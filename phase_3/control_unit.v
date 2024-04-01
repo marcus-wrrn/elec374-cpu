@@ -99,6 +99,9 @@ parameter andi4 = 6'b011010;
 parameter ror_rol3 = 6'b011011;      // ror & rol
 parameter ror_rol4 = 6'b011100;
 parameter ror_rol5 = 6'b011101;
+parameter sh3 = 6'b011110;           // shra, shr & shl
+parameter sh4 = 6'b011111;
+parameter sh5 = 6'b100000;
 
 reg [5:0] present_state = reset_state;
 
@@ -130,6 +133,9 @@ always @(posedge clk, posedge reset) begin
                         not_opcode:     present_state <= neg_not3;
                         ror_opcode:     present_state <= ror_rol3;
                         rol_opcode:     present_state <= ror_rol3;
+                        shra_opcode:    present_state <= sh3;
+                        shr_opcode:     present_state <= sh3;
+                        shl_opcode:     present_state <= sh3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -167,6 +173,10 @@ always @(posedge clk, posedge reset) begin
                 ror_rol3: present_state <= ror_rol4;
                 ror_rol4: present_state <= ror_rol5;
                 ror_rol5: present_state <= fetch0;
+                // shra, shr & shl
+                sh3: present_state <= sh4;
+                sh4: present_state <= sh5;
+                sh5: present_state <= fetch0;
 
                 // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
@@ -341,6 +351,19 @@ begin
             #20 zlo_out <= 0; gra <= 0; r_in <= 0;
         end
 
+        // shra, shr & shl instruction
+        sh3: begin
+            grb <= 1; r_out <= 1; y_enable <= 1;
+            #20 grb <= 0; r_out <= 0; y_enable <= 0;
+        end
+        sh4: begin
+            grc <= 1; r_out <= 1; z_enable <= 1;
+            #20 grc <= 0; r_out <= 0; z_enable <= 0;
+        end
+        sh5: begin
+            zlo_out <= 1; gra <= 1; r_in <= 1;
+            #20 zlo_out <= 0; gra <= 0; r_in <= 0;
+        end
         // TODO: FILL IN JOBS
     endcase
 end
