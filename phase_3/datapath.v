@@ -142,7 +142,7 @@ control_unit control_unit(
 
     .inport_out(inport_out),
     .read(read),
-    .write(ram_write),
+    .ram_write(ram_write),
 
     .hi_enable(hi_enable),
     .lo_enable(lo_enable),

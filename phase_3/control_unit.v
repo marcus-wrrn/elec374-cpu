@@ -9,7 +9,7 @@ module control_unit (
 
     output reg inport_out,
     output reg read,
-    output reg write,
+    output reg ram_write,
     // operations
 
     // signals
@@ -102,6 +102,12 @@ parameter ror_rol5 = 6'b011101;
 parameter sh3 = 6'b011110;           // shra, shr & shl
 parameter sh4 = 6'b011111;
 parameter sh5 = 6'b100000;
+parameter st3 = 6'b100001;           // st
+parameter st4 = 6'b100010;
+parameter st5 = 6'b100011;
+parameter st6 = 6'b100100;
+parameter st7 = 6'b100101;
+
 
 reg [5:0] present_state = reset_state;
 
@@ -136,6 +142,7 @@ always @(posedge clk, posedge reset) begin
                         shra_opcode:    present_state <= sh3;
                         shr_opcode:     present_state <= sh3;
                         shl_opcode:     present_state <= sh3;
+                        st_opcode:      present_state <= st3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -177,6 +184,12 @@ always @(posedge clk, posedge reset) begin
                 sh3: present_state <= sh4;
                 sh4: present_state <= sh5;
                 sh5: present_state <= fetch0;
+                // st
+                st3: present_state <= st4;
+                st4: present_state <= st5;
+                st5: present_state <= st6;
+                st6: present_state <= st7;
+                st7: present_state <= fetch0;
 
                 // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
@@ -194,7 +207,7 @@ begin
             // reset = 0;
             inport_out = 0;
             read = 0;
-            write = 0;
+            ram_write = 0;
             hi_enable = 0;
             lo_enable = 0;
             con_enable = 0;
@@ -363,6 +376,36 @@ begin
         sh5: begin
             zlo_out <= 1; gra <= 1; r_in <= 1;
             #20 zlo_out <= 0; gra <= 0; r_in <= 0;
+        end
+
+        // st instruction
+        st3: begin
+            gra <= 1; ba_out <= 1; y_enable <= 1;
+			#20 gra <= 0; ba_out <= 0; y_enable <= 0;
+        end
+
+        // present_state: 11
+        st4: begin
+            c_sign_extended_out <= 1;  z_enable <= 1;   // ADD c_sign_extended_out (gra) + grb
+			#20 c_sign_extended_out <= 0; z_enable <= 0;
+        end
+
+        // present_state: 12
+        st5: begin
+			zlo_out <= 1; mar_enable <= 1;
+			#20 zlo_out <= 0; mar_enable <= 0;
+		end
+
+        // present_state: 13
+        st6: begin
+            grb <= 1; r_out <= 1; mdr_enable <= 1;
+            #20 grb <= 0; r_out <= 0; mdr_enable <= 0;
+        end
+
+        // present_state: 14
+        st7: begin
+            ram_write <= 1;
+            #20 ram_write <= 0;
         end
         // TODO: FILL IN JOBS
     endcase
