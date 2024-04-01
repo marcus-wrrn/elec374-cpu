@@ -41,6 +41,7 @@ module control_unit (
     output reg pc_increment,
     output reg y_clr,
     output reg ir_clr,
+    output reg clr,
     output reg r15_enable
 );
 
@@ -137,7 +138,7 @@ reg [5:0] present_state = reset_state;
 reg toggle = 0; // Initialize the toggle flip-flop
 always @(posedge clk, posedge reset) begin
     if (reset == 1'b1) begin
-        present_state <= reset_state; // Use non-blocking assignment in sequential logic
+        present_state <= reset_state; 
         toggle <= 0; // Reset the toggle to 0 on reset
     end
     else begin
@@ -257,7 +258,7 @@ always @(present_state)
 begin
     case(present_state)
         reset_state: begin
-            // reset = 0;
+            clr = 1;
             inport_out = 0;
             read = 0;
             ram_write = 0;
@@ -284,6 +285,7 @@ begin
             zlo_out = 0;
             mdr_out = 0;
             pc_out = 0;
+            #20 clr = 0;
         end
 		fetch0: begin
 			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; ir_clr <= 1; y_clr <= 1; //ir_clr???? maybe add y_clr too

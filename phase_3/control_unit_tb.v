@@ -21,13 +21,12 @@ datapath DUT(
 // Initialize the clock signals
 initial begin
 	clk = 0;
-	clr = 0;
 	forever #10 clk = ~ clk;
 end
 
-// reset=0;
-// stop=0;
-// inport_in=0;
-// outport_data=0;
+initial begin
+	reset = 1;
+	#20 reset = 0;
+end
 
 endmodule

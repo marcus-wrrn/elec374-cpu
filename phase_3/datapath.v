@@ -172,6 +172,7 @@ control_unit control_unit(
     .pc_increment(pc_increment),
     .y_clr(y_clr),
     .ir_clr(ir_clr),
+    .clr(clr),
     .r15_enable(r15_enable)
 );
 
