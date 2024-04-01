@@ -126,7 +126,7 @@ reg_32_bit hi(clk, clr, hi_enable, bus, hi_data);
 reg_32_bit lo(clk, clr, lo_enable, bus, lo_data);
 reg_32_bit zlo(clk, clr, z_enable, alu_out[31:0], zlo_data);
 reg_32_bit zhi(clk, clr, z_enable, alu_out[63:32], zhi_data);
-reg_32_bit ir(clk, clr, ir_enable, bus, ir_data);
+reg_32_bit ir(clk, ir_clr, ir_enable, bus, ir_data);
 reg_32_bit mar(clk, clr, mar_enable, bus, mar_data);
 reg_32_bit mdr(clk, clr, mdr_enable, mdr_connection, mdr_data);
 c_sign_extended_reg c_sign_extended(clk, clr, c_sign_extended_connection, c_sign_extended_data);
@@ -170,7 +170,8 @@ control_unit control_unit(
     .pc_out(pc_out),
 
     .pc_increment(pc_increment),
-    .y_clr(y_clr)
+    .y_clr(y_clr),
+    .ir_clr(ir_clr)
 );
 
 // Instantiate RAM, SEE IF THESE ARE THE RIGHT CONNECTIONS

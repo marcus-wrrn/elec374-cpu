@@ -39,7 +39,8 @@ module control_unit (
     output reg pc_out,
 
     output reg pc_increment,
-    output reg y_clr
+    output reg y_clr,
+    output reg ir_clr
 );
 
 // Opcodes for operations
@@ -88,11 +89,13 @@ parameter nop3 = 6'b010000;           // nop
 parameter add3 = 6'b010001;           // add
 parameter add4 = 6'b010010;
 parameter add5 = 6'b010011;
-parameter addi3 = 6'b010100;          // addi
-parameter addi4 = 6'b010101;
-parameter addi5 = 6'b010110;
-parameter neg_not3 = 6'b010111;           // neg
+parameter addi_andi_ori3 = 6'b010100;          // addi, andi & ori
+parameter addi_andi_ori4 = 6'b010101;
+parameter addi_andi_ori5 = 6'b010110;
+parameter neg_not3 = 6'b010111;           // neg & not
 parameter neg_not4 = 6'b011000;
+parameter andi3 = 6'b011001;          // andi
+parameter andi4 = 6'b011010;
 
 
 reg [5:0] present_state = reset_state;
@@ -118,7 +121,9 @@ always @(posedge clk, posedge reset) begin
                         branch_opcode:  present_state <= br3;
                         nop_opcode:     present_state <= nop3;
                         add_opcode:     present_state <= add3;
-                        addi_opcode:    present_state <= addi3;
+                        addi_opcode:    present_state <= addi_andi_ori3;
+                        andi_opcode:    present_state <= addi_andi_ori3;
+                        ori_opcode:     present_state <= addi_andi_ori3;
                         neg_opcode:     present_state <= neg_not3;
                         not_opcode:     present_state <= neg_not3;
                         // TODO: Additional opcodes
@@ -148,9 +153,9 @@ always @(posedge clk, posedge reset) begin
                 add4: present_state <= add5;
                 add5: present_state <= fetch0;
                 // addi
-                addi3: present_state <= addi4;
-                addi4: present_state <= addi5;
-                addi5: present_state <= fetch0;
+                addi_andi_ori3: present_state <= addi_andi_ori4;
+                addi_andi_ori4: present_state <= addi_andi_ori5;
+                addi_andi_ori5: present_state <= fetch0;
                 // neg
                 neg_not3: present_state <= neg_not4;
                 neg_not4: present_state <= fetch0;
@@ -197,8 +202,8 @@ begin
             pc_out = 0;
         end
 		fetch0: begin
-			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; y_clr <= 1; //y_clr????
-			#20 mar_enable <= 0; pc_increment <= 0; y_clr <= 0; z_enable <= 1; //y_clr????
+			pc_out <= 1; mar_enable <= 1; pc_increment <= 1; ir_clr <= 1; y_clr <= 1; //ir_clr???? maybe add y_clr too
+			#20 mar_enable <= 0; pc_increment <= 0; ir_clr <= 0; y_clr <= 0; z_enable <= 1; //ir_clr????
 			#20 pc_out <= 0; z_enable <= 0;
 		end
 		fetch1: begin
@@ -291,15 +296,15 @@ begin
         end
 
         // addi instruction
-        addi3: begin	
+        addi_andi_ori3: begin	
 			grb <= 1; r_out <= 1; y_enable <= 1;
 			#20 grb <= 0; r_out <= 0; y_enable <= 0;
 		end
-		addi4: begin	
+		addi_andi_ori4: begin	
 			c_sign_extended_out <= 1;  z_enable <= 1;
 			#20 c_sign_extended_out <= 0; z_enable <= 0;
 		end
-		addi5: begin
+		addi_andi_ori5: begin
 			zlo_out <= 1; gra <= 1; r_in <= 1;
 			#20 zlo_out <= 0; gra <= 0;  r_in <= 0;
 		end
