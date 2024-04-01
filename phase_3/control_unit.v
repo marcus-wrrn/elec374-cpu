@@ -40,7 +40,8 @@ module control_unit (
 
     output reg pc_increment,
     output reg y_clr,
-    output reg ir_clr
+    output reg ir_clr,
+    output reg r15_enable
 );
 
 // Opcodes for operations
@@ -124,6 +125,10 @@ parameter div3 = 6'b101111;          // div
 parameter div4 = 6'b110000;
 parameter div5 = 6'b110001;
 parameter div6 = 6'b110010;
+parameter jal3 = 6'b110011;          // jal
+parameter jal4 = 6'b110100;
+parameter jr3 = 6'b110101;           // jr
+
 
 
 reg [5:0] present_state = reset_state;
@@ -167,6 +172,8 @@ always @(posedge clk, posedge reset) begin
                         div_opcode:     present_state <= div3;
                         mfhi_opcode:    present_state <= mfhi3;
                         mflo_opcode:    present_state <= mflo3;
+                        jal_opcode:     present_state <= jal3;
+                        jr_opcode:      present_state <= jr3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -232,7 +239,11 @@ always @(posedge clk, posedge reset) begin
                 mfhi3: present_state <= fetch0;
                 // mflo
                 mflo3: present_state <= fetch0;
-
+                // jal
+                jal3: present_state <= jal4;
+                jal4: present_state <= fetch0;
+                // jr
+                jr3: present_state <= fetch0;
                 // TODO: FILL IN PRESENT STATES EX: add_sub3: present_state <= add_sub4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
             endcase
@@ -507,6 +518,20 @@ begin
 			lo_out <= 1; gra <= 1; r_in <= 1;
             #20 lo_out <= 0; gra <= 0; r_in <= 0;
 		end
+        // jal instruction
+        jal3: begin	
+			pc_out <= 1; r15_enable <= 1;
+            #20 pc_out <= 0; r15_enable <= 0;
+		end
+        jal4: begin
+            pc_enable <= 1; gra <= 1; r_out <= 1;
+			#20 pc_enable <= 0; gra <= 0; r_out <= 0;
+        end
+        // jr instruction
+        jr3: begin
+            gra <= 1; r_out <= 1; pc_enable <= 1;
+			#20 gra <= 0; r_out <= 0; pc_enable <= 0;
+        end
         // TODO: FILL IN JOBS
     endcase
 end
