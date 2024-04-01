@@ -120,6 +120,10 @@ parameter mul5 = 6'b101011;
 parameter mul6 = 6'b101100;
 parameter mfhi3 = 6'b101101;         // mfhi
 parameter mflo3 = 6'b101110;         // mflo
+parameter div3 = 6'b101111;          // div
+parameter div4 = 6'b110000;
+parameter div5 = 6'b110001;
+parameter div6 = 6'b110010;
 
 
 reg [5:0] present_state = reset_state;
@@ -160,6 +164,7 @@ always @(posedge clk, posedge reset) begin
                         and_opcode:     present_state <= and_or3;
                         or_opcode:      present_state <= and_or3;
                         mul_opcode:     present_state <= mul3;
+                        div_opcode:     present_state <= div3;
                         mfhi_opcode:    present_state <= mfhi3;
                         mflo_opcode:    present_state <= mflo3;
                         // TODO: Additional opcodes
@@ -218,6 +223,11 @@ always @(posedge clk, posedge reset) begin
                 mul4: present_state <= mul5;
                 mul5: present_state <= mul6;
                 mul6: present_state <= fetch0;
+                // div
+                div3: present_state <= div4;
+                div4: present_state <= div5;
+                div5: present_state <= div6;
+                div6: present_state <= fetch0;
                 // mfhi
                 mfhi3: present_state <= fetch0;
                 // mflo
@@ -467,6 +477,23 @@ begin
             #20 zlo_out <= 0; lo_enable <= 0;
         end
         mul6: begin
+            zhi_out <= 1; hi_enable <= 1;
+            #20 zhi_out <= 0; hi_enable <= 0;
+        end
+        // div instruction
+        div3: begin
+            gra <= 1; r_out <= 1; y_enable <= 1;
+            #20 gra <= 0; r_out <= 0; y_enable <= 0;
+        end
+        div4: begin
+            grb <= 1; r_out <= 1; z_enable <= 1;
+            #20 grb <= 0; r_out <= 0; z_enable <= 0;
+        end
+        div5: begin
+            zlo_out <= 1; lo_enable <= 1;
+            #20 zlo_out <= 0; lo_enable <= 0;
+        end
+        div6: begin
             zhi_out <= 1; hi_enable <= 1;
             #20 zhi_out <= 0; hi_enable <= 0;
         end
