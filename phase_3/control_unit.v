@@ -65,21 +65,28 @@ localparam not_opcode = 5'b10010;
 localparam branch_opcode = 5'b10011;
 localparam jr_opcode = 5'b10100;
 localparam jal_opcode = 5'b10101;
+localparam nop_opcode = 5'b11010;
 
 // FSM signals
-parameter reset_state = 4'b0000;
-parameter fetch0 = 4'b0001;
-parameter fetch1 = 4'b0010;
-parameter fetch2 = 4'b0011;
-parameter ld3 = 4'b0100;            // ld
-parameter ld4 = 4'b0101;
-parameter ld5 = 4'b0110;
-parameter ld6 = 4'b0111;
-parameter ld7 = 4'b1000;
-parameter ldi3 = 4'b1001;           // ldi
-parameter ldi4 = 4'b1010;
-parameter ldi5 = 4'b1011;
-reg [3:0] present_state = reset_state;
+parameter reset_state = 6'b000000;
+parameter fetch0 = 6'b000001;
+parameter fetch1 = 6'b000010;
+parameter fetch2 = 6'b000011;
+parameter ld3 = 6'b000100;            // ld
+parameter ld4 = 6'b000101;
+parameter ld5 = 6'b000110;
+parameter ld6 = 6'b000111;
+parameter ld7 = 6'b001000;
+parameter ldi3 = 6'b001001;           // ldi
+parameter ldi4 = 6'b001010;
+parameter ldi5 = 6'b001011;
+parameter br3 = 6'b001100;            // br
+parameter br4 = 6'b001101;
+parameter br5 = 6'b001110;
+parameter br6 = 6'b001111;
+parameter nop3 = 6'b010000;           // nop
+
+reg [5:0] present_state = reset_state;
 
 
 reg toggle = 0; // Initialize the toggle flip-flop
@@ -99,6 +106,8 @@ always @(posedge clk, posedge reset) begin
                     case (ir[31:27])
                         ld_opcode:      present_state <= ld3;
                         ldi_opcode:     present_state <= ldi3;
+                        branch_opcode:  present_state <= br3;
+                        nop_opcode:     present_state <= nop3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -114,6 +123,14 @@ always @(posedge clk, posedge reset) begin
                 ldi3: present_state <= ldi4;
                 ldi4: present_state <= ldi5;
                 ldi5: present_state <= fetch0;
+                // br
+                br3: present_state <= br4;
+                br4: present_state <= br5;
+                br5: present_state <= br6;
+                br6: present_state <= fetch0;
+                // nop
+                nop3: present_state <= fetch0;
+                
                 // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
             endcase
@@ -204,6 +221,41 @@ begin
 			zlo_out <= 1; gra <= 1; r_in <= 1;
 			#20 zlo_out <= 0; gra <= 0;  r_in <= 0;
 		end
+
+        // brmi instruction
+        br3: begin	
+			gra <= 1; r_out <= 1; con_enable <= 1;
+            #20 gra <= 0; r_out <= 0; con_enable <= 0;
+		end
+
+        // present_state: b
+        br4: begin
+            pc_out <= 1; y_enable <= 1;
+            #20 pc_out <= 0; y_enable <= 0;
+        end
+
+        // present_state: c
+        br5: begin
+            c_sign_extended_out <= 1; z_enable <= 1;
+            #20 c_sign_extended_out <= 0; z_enable <= 0;
+        end
+
+        // present_state: d
+        br6: begin
+            if (con_ff == 1) begin
+                zlo_out <= 1; pc_enable <= 1; 
+                #20 zlo_out <= 0; pc_enable <= 0; //pc_increment <= 1;
+                //#20 pc_increment <= 0;
+            end
+            else begin
+                zlo_out <= 1;
+                #20 zlo_out <= 0;
+            end
+        end
+
+        nop3: begin
+            #40; // Do nothing
+        end
         // TODO: FILL IN JOBS
     endcase
 end
