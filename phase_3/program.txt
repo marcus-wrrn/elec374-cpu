@@ -24,5 +24,8 @@ ldi R3, 3 ; R3 = 3
 
 ldi R2, 0x43 ; R2 = 0x43
 00001_0010_0000_0000000000001000011
+09000043
 
 brmi R2, 3 ; continue with the next instruction (will not branch)
+10011_0010_0000_0000000000000000111
+99000007
