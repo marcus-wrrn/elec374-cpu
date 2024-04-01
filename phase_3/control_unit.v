@@ -85,6 +85,9 @@ parameter br4 = 6'b001101;
 parameter br5 = 6'b001110;
 parameter br6 = 6'b001111;
 parameter nop3 = 6'b010000;           // nop
+parameter add3 = 6'b010001;           // add
+parameter add4 = 6'b010010;
+parameter add5 = 6'b010011;
 
 reg [5:0] present_state = reset_state;
 
@@ -108,6 +111,7 @@ always @(posedge clk, posedge reset) begin
                         ldi_opcode:     present_state <= ldi3;
                         branch_opcode:  present_state <= br3;
                         nop_opcode:     present_state <= nop3;
+                        add_opcode:     present_state <= add3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -130,7 +134,11 @@ always @(posedge clk, posedge reset) begin
                 br6: present_state <= fetch0;
                 // nop
                 nop3: present_state <= fetch0;
-                
+                // add
+                add3: present_state <= add4;
+                add4: present_state <= add5;
+                add5: present_state <= fetch0;
+
                 // TODO: FILL IN PRESENT STATES EX: add3: present_state <= add4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
             endcase
@@ -227,20 +235,14 @@ begin
 			gra <= 1; r_out <= 1; con_enable <= 1;
             #20 gra <= 0; r_out <= 0; con_enable <= 0;
 		end
-
-        // present_state: b
         br4: begin
             pc_out <= 1; y_enable <= 1;
             #20 pc_out <= 0; y_enable <= 0;
         end
-
-        // present_state: c
         br5: begin
             c_sign_extended_out <= 1; z_enable <= 1;
             #20 c_sign_extended_out <= 0; z_enable <= 0;
         end
-
-        // present_state: d
         br6: begin
             if (con_ff == 1) begin
                 zlo_out <= 1; pc_enable <= 1; 
@@ -253,8 +255,23 @@ begin
             end
         end
 
+        // nop instruction
         nop3: begin
             #40; // Do nothing
+        end
+
+        // add instruction
+        add3: begin
+            grb <= 1; r_out <= 1; y_enable <= 1;
+            #20 grb <= 0; r_out <= 0; y_enable <= 0;
+        end
+        add4: begin
+            grc <= 1; r_out <= 1; z_enable <= 1;
+            #20 grc <= 0; r_out <= 0; z_enable <= 0;
+        end
+        add5: begin
+            zlo_out <= 1; gra <= 1; r_in <= 1;
+            #20 zlo_out <= 0; gra <= 0; r_in <= 0;
         end
         // TODO: FILL IN JOBS
     endcase
