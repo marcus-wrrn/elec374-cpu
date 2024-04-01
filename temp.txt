@@ -1,0 +1,35 @@
+in R4 ; set 8 switches (SW[0] to SW[7]) to 0x80 – read it into the lower 8 bits
+10110_0100_00000000000000000000000
+0xB2000000
+
+st 0xAA, R4 ; of R4 (set other input bits to 0), and save it for the next time around
+00010_0000_0100_0000000000010101010
+0x102000AA
+
+ldi R1, 0x2E ; address of loop in R1
+00001_0001_00000000000000000101110
+0x880002E
+
+ldi R7, 1 ; R7 = 1
+00001_0111_00000000000000000000001
+0xB800001
+
+ldi R5, 40 ; R5 = 40, loop counter (5 times)
+00001_0101_00000000000000000101000
+0xA800028
+
+loop: out R4 ; display the lower 8 bits of R4 on the two 7-segment displays
+10111_0100_00000000000000000000000
+0xBA000000
+
+ldi R5, -1(R5) ; is the loop done?
+00001_0101_00000000000000000101000
+
+brzr R5, 8 ; yes – branch to done
+10011_00_0101_000000000000000001000
+0x98A00008
+
+ld R6, 0xF0 ; no – set R6 = 0xFFFF; delay, so you can see the numbers on the
+00000_
+
+loop2: ldi R6, -1(R6) ; two 7-segment displays
