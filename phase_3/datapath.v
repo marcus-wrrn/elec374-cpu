@@ -3,7 +3,8 @@ module datapath (
     input stop,
     input clk,
     input [31:0] inport_in,
-    output [31:0] outport_data
+    output [31:0] outport_data,
+    output [7:0] display_data
 );
 
 wire [31:0] bus;
@@ -101,6 +102,7 @@ wire [31:0] zlo_data;
 wire [31:0] inport_data;
 wire [31:0] c_sign_extended_data;
 wire [31:0] ir_data;
+
 
 
 // Instantiate register modules
@@ -296,6 +298,13 @@ bus_mux_32_to_1 bus_mux(
     .bus_mux_in_mdr(mdr_data),
     .bus_mux_in_inport(inport_data),
     .bus_mux_in_c_sign_extended(c_sign_extended_data)
+);
+
+
+Seven_Seg_Display_Out display(
+    .outputt(display_data[7:0]),
+    .clk(clk),
+    .data(inport_in[3:0])
 );
 
 endmodule

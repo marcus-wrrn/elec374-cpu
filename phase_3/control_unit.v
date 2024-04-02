@@ -73,6 +73,8 @@ localparam out_opcode = 5'b10111;
 localparam mfhi_opcode = 5'b11000;
 localparam mflo_opcode = 5'b11001;
 localparam nop_opcode = 5'b11010;
+// localparam in_opcode = 5'b10110;
+// localparam out_opcode = 5'b10111;
 
 // FSM signals
 parameter reset_state = 6'b000000;
@@ -129,6 +131,8 @@ parameter div6 = 6'b110010;
 parameter jal3 = 6'b110011;          // jal
 parameter jal4 = 6'b110100;
 parameter jr3 = 6'b110101;           // jr
+parameter in3 = 6'b110110;           // in
+parameter out3 = 6'b110111;          // out
 
 
 
@@ -175,6 +179,8 @@ always @(posedge clk, posedge reset) begin
                         mflo_opcode:    present_state <= mflo3;
                         jal_opcode:     present_state <= jal3;
                         jr_opcode:      present_state <= jr3;
+                        in_opcode:      present_state <= in3;
+                        out_opcode:     present_state <= out3;
                         // TODO: Additional opcodes
 
                     endcase
@@ -245,6 +251,10 @@ always @(posedge clk, posedge reset) begin
                 jal4: present_state <= fetch0;
                 // jr
                 jr3: present_state <= fetch0;
+                // in
+                in3: present_state <= fetch0;
+                // out
+                out3: present_state <= fetch0;
                 // TODO: FILL IN PRESENT STATES EX: add_sub3: present_state <= add_sub4;
                 // Make sure to use non-blocking assignments (<=) within always blocks
             endcase
@@ -533,6 +543,16 @@ begin
         jr3: begin
             gra <= 1; r_out <= 1; pc_enable <= 1;
 			#20 gra <= 0; r_out <= 0; pc_enable <= 0;
+        end
+        // in instruction
+        in3: begin	
+			inport_out <= 1; gra <= 1; r_in <= 1;
+            #20 inport_out <= 0; gra <= 0; r_in <= 0;
+		end
+        // out instruction
+        out3: begin
+            outport_enable <= 1; gra <= 1; r_out <= 1;
+            #20 outport_enable <= 0; gra <= 0; r_out <= 0;
         end
         // TODO: FILL IN JOBS
     endcase

@@ -23,13 +23,17 @@ loop: out R4 ; display the lower 8 bits of R4 on the two 7-segment displays
 0xBA000000
 
 ldi R5, -1(R5) ; is the loop done?
-00001_0101_00000000000000000101000
+00001_0101_11111111111111111111111
+AFFFFFF
 
 brzr R5, 8 ; yes – branch to done
 10011_00_0101_000000000000000001000
 0x98A00008
 
 ld R6, 0xF0 ; no – set R6 = 0xFFFF; delay, so you can see the numbers on the
-00000_
+00000_0110_0000_0000000000011110000
+30000F0
 
 loop2: ldi R6, -1(R6) ; two 7-segment displays
+00001_0110_0110_1111111111111111111
+B37FFFF

@@ -1,0 +1,28 @@
+loop2: ldi R6, -1(R6) ; two 7-segment displays
+00001_0110_0110_1111111111111111111
+
+nop
+D0000000
+
+brnz R6, -3 ; branch to loop2 if R6 ≠ 0 – delay is not done yet
+10011_0110_0001_1111111111111111101
+9B0FFFFD
+
+shr R4, R4, R7 ; delay is done - shift the number in R4 right once
+00101_0100_0100_0111_000000000000000
+2A238000
+
+brnz R4, -9 ; back to loop and display the shifted number if it is not zero
+10011_0100_0001_1111111111111110111
+9A0FFFF7
+
+ld R4, 0xAA ; if it is zero, start over with the number 0x80 stored at address 0xAA
+00000_0100_0000_0000000000010101010
+20000AA
+
+jr R1 ; branch to loop using address in R1
+10100_0001_0000_0000_000000000000000
+A0800000
+
+ldi R4, 0x55 ; final display value 0x55
+00001_0100_0000_0000000000001010101
